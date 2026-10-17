@@ -44,13 +44,14 @@ export function GlassTabBar({ items }: { items: TabItem[] }) {
     </View>
   );
 
-  // Fondo sólido siempre visible; el cristal va encima como capa extra. Así la barra no desaparece si el cristal nativo no se pinta.
+  // iOS 26: el cristal líquido real es la superficie (igual que la barra nativa del iPhone). Sin él, material borroso o fondo sólido.
   const solid = scheme === 'dark' ? 'rgba(22,24,31,0.92)' : 'rgba(255,255,255,0.94)';
+  const fill = { position: 'absolute' as const, top: 0, left: 0, right: 0, bottom: 0 };
   return (
     <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: Math.max(insets.bottom, 12) + 4, alignItems: 'center', zIndex: 10 }}>
-      <View style={[shape, { backgroundColor: solid, borderWidth: 1, borderColor: colors.hairline, shadowColor: '#000', shadowOpacity: scheme === 'dark' ? 0.5 : 0.18, shadowRadius: 24, shadowOffset: { width: 0, height: 10 } }]}>
-        {glass ? <GlassView glassEffectStyle="regular" isInteractive colorScheme={scheme} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} /> : null}
-        {!glass && Platform.OS === 'ios' ? <BlurView intensity={60} tint={scheme === 'dark' ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} /> : null}
+      <View style={[shape, glass ? { backgroundColor: scheme === 'dark' ? 'rgba(22,24,31,0.28)' : 'rgba(255,255,255,0.3)', shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 20, shadowOffset: { width: 0, height: 8 } } : { backgroundColor: solid, borderWidth: 1, borderColor: colors.hairline }]}>
+        {glass ? <GlassView glassEffectStyle="regular" isInteractive colorScheme={scheme} style={[fill, shape]} /> : null}
+        {!glass && Platform.OS === 'ios' ? <BlurView intensity={60} tint={scheme === 'dark' ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'} style={fill} /> : null}
         {bar}
       </View>
     </View>
