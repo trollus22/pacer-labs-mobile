@@ -1,0 +1,65 @@
+name: iOS IPA (sin firmar)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['app/**', '.github/workflows/ios.yml']
+
+jobs:
+  ipa:
+    runs-on: macos-latest
+    timeout-minutes: 75
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - run: npm ci
+
+      - run: npx expo prebuild --platform ios --no-install --clean
+
+      - name: Instalar pods
+        working-directory: app/ios
+        run: pod install
+
+      # Sin certificado ni perfil de aprovisionamiento: el .app queda sin firmar. Para instalarlo en un iPhone
+      # hay que re-firmarlo (Sideloadly / AltStore con un Apple ID). No sirve para TestFlight ni App Store.
+      - name: Compilar (Release, dispositivo, sin firma)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -workspace ios/PACERLABS.xcworkspace \
+            -scheme PACERLABS \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath ios/build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: Empaquetar .ipa
+        run: |
+          rm -rf Payload PACER-LABS.ipa
+          mkdir Payload
+          cp -R ios/build/Build/Products/Release-iphoneos/PACERLABS.app Payload/
+          zip -qry PACER-LABS.ipa Payload
+          ls -lh PACER-LABS.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PACER-LABS-ipa
+          path: app/PACER-LABS.ipa
+          if-no-files-found: error
+          retention-days: 30
