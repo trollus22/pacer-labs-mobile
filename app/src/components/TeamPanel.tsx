@@ -107,7 +107,7 @@ function ReadinessHeat({ athletes }: { athletes: TeamDashboard['athletes'] }) {
       {athletes.map((a) => (
         <PressableScale key={a.id} scale={0.99} onPress={() => router.push({ pathname: '/athlete/[id]', params: { id: a.id, name: a.name, tab: 'form' } })} accessibilityLabel={`${a.name}, últimos 14 días`}>
           <View style={styles.heatRow}>
-            <Text variant="subhead" numberOfLines={1} style={{ width: 130, fontFamily: 'PlusJakartaSans_700Bold' }}>{a.name}</Text>
+            <Text variant="subhead" numberOfLines={1} style={{ width: 130, fontFamily: 'Inter_600SemiBold' }}>{a.name}</Text>
             <View style={{ flex: 1, flexDirection: 'row', gap: 4 }}>
               {a.spark.slice(-14).map((v, i) => {
                 const c = col(v);
@@ -155,5 +155,5 @@ const useStyles = createStyles((colors) => ({
   
   row: { flexDirection: 'row', alignItems: 'center', gap: 14, padding: 14, backgroundColor: colors.surface, borderRadius: 28, borderCurve: 'continuous', borderWidth: 1, borderColor: colors.tileBorder },
   right: { alignItems: 'flex-end', gap: 2 },
-  score: { fontFamily: 'PlusJakartaSans_300Light', fontSize: 30, lineHeight: 34, letterSpacing: -1.2, color: colors.text },
+  score: { fontFamily: 'Inter_300Light', fontSize: 30, lineHeight: 34, letterSpacing: -1.2, color: colors.text },
 }));

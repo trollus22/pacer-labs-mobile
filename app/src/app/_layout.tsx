@@ -5,8 +5,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useReducedMotion } from 'react-native-reanimated';
 import { useFonts } from 'expo-font';
-import { PlusJakartaSans_200ExtraLight, PlusJakartaSans_300Light, PlusJakartaSans_400Regular, PlusJakartaSans_500Medium, PlusJakartaSans_600SemiBold, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold } from '@expo-google-fonts/plus-jakarta-sans';
-import { JetBrainsMono_500Medium, JetBrainsMono_700Bold } from '@expo-google-fonts/jetbrains-mono';
+import { Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { AuthProvider, useAuth } from '@/lib/auth';
 import { ThemeProvider, accent, useTheme } from '@/theme';
 
@@ -15,8 +14,7 @@ void SplashScreen.preventAutoHideAsync();
 
 export default function Root() {
   const [fontsLoaded] = useFonts({
-    PlusJakartaSans_200ExtraLight, PlusJakartaSans_300Light, PlusJakartaSans_400Regular, PlusJakartaSans_500Medium, PlusJakartaSans_600SemiBold, PlusJakartaSans_700Bold, PlusJakartaSans_800ExtraBold,
-    JetBrainsMono_500Medium, JetBrainsMono_700Bold,
+    Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600SemiBold,
   });
   const [themeReady, setThemeReady] = useState(false);
   const onThemeReady = useCallback(() => setThemeReady(true), []);
@@ -48,7 +46,7 @@ function Gate({ ready: assetsReady }: { ready: boolean }) {
   const navTheme = { ...base, colors: { ...base.colors, background: colors.bg, card: colors.bg, text: colors.text, border: colors.separator, primary: accent.coral } };
   return (
     <NavThemeProvider value={navTheme}>
-      <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+      <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg }, animation: reduced ? 'fade' : 'default' }}>
         {/* Entrar y salir de la sesión es un fundido, no un deslizamiento: no es «ir más adentro» en la jerarquía. */}
         <Stack.Protected guard={status === 'out'}>

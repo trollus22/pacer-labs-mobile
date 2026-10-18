@@ -49,5 +49,5 @@ const useStyles = createStyles((colors) => ({
   track: { flexDirection: 'row', backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.hairline, borderRadius: radius.pill, padding: PAD, height: 44 },
   pill: { position: 'absolute', top: PAD, bottom: PAD, left: PAD, borderRadius: radius.pill, backgroundColor: colors.text },
   item: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  label: { fontFamily: 'PlusJakartaSans_700Bold' },
+  label: { fontFamily: 'Inter_600SemiBold' },
 }));

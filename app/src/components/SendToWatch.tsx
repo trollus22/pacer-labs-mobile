@@ -23,7 +23,7 @@ export function SendToWatch({ workoutId, onGlass }: { workoutId: string; onGlass
   const [result, setResult] = useState<WatchResult | null>(null);
   const [error, setError] = useState('');
   if (!data || !data.configured) return null;
-  const fg = onGlass ? '#FFFFFF' : colors.text, fg2 = onGlass ? 'rgba(255,255,255,0.75)' : colors.textSecondary;
+  const fg = colors.text, fg2 = colors.textSecondary;
 
   if (!data.supported) return onGlass ? null : <View style={{ flexDirection: 'row', gap: 8 }}><MaterialCommunityIcons name="watch-variant" size={18} color={fg2} /><Text variant="footnote" color={fg2} style={{ flex: 1 }}>{data.reason}</Text></View>;
 

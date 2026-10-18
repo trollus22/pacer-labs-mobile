@@ -1,7 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Appearance, Platform, StyleSheet, useColorScheme, type ImageStyle, type TextStyle, type ViewStyle } from 'react-native';
 import { palettes, type Palette, type Scheme } from './tokens';
-import { darken } from '@/lib/color';
 import { loadPref, savePref } from '@/lib/storage';
 
 export type ThemePref = 'system' | 'light' | 'dark';
@@ -33,7 +32,7 @@ export function createStyles<T extends Record<string, ViewStyle | TextStyle | Im
 // Oscuro por defecto: es el aspecto de la marca. «Sistema» sigue el ajuste del teléfono.
 export function ThemeProvider({ children, onReady }: { children: ReactNode; onReady?: () => void }) {
   const system = useColorScheme();
-  const [pref, setPrefState] = useState<ThemePref>('dark');
+  const [pref, setPrefState] = useState<ThemePref>('light');
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -47,11 +46,12 @@ export function ThemeProvider({ children, onReady }: { children: ReactNode; onRe
   }, [pref]);
 
   const setPref = useCallback((p: ThemePref) => { setPrefState(p); void savePref(p); }, []);
-  const scheme: Scheme = pref === 'system' ? (system === 'light' ? 'light' : 'dark') : pref;
+  const scheme: Scheme = 'light'; // un único tema: hormigón claro
+  void system;
 
   const value = useMemo<Theme>(() => ({
     colors: palettes[scheme], scheme, pref, setPref,
-    ink: (c: string) => (scheme === 'light' ? darken(c, 0.3) : c),
+    ink: (c: string) => c,
   }), [scheme, pref, setPref]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
@@ -60,6 +60,6 @@ export function ThemeProvider({ children, onReady }: { children: ReactNode; onRe
 /** Fuerza un modo para un subárbol (p. ej. la pantalla de bienvenida, que es siempre oscura). */
 export function ForceScheme({ scheme, children }: { scheme: Scheme; children: ReactNode }) {
   const base = useTheme();
-  const value = useMemo<Theme>(() => ({ ...base, colors: palettes[scheme], scheme, ink: (c: string) => (scheme === 'light' ? darken(c, 0.3) : c) }), [base, scheme]);
+  const value = useMemo<Theme>(() => ({ ...base, colors: palettes[scheme], scheme, ink: (c: string) => c }), [base, scheme]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

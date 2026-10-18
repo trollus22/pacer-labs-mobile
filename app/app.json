@@ -3,11 +3,11 @@
     "name": "PACER LABS",
     "slug": "pacer-labs",
     "scheme": "pacerlabs",
-    "version": "1.0.18",
+    "version": "1.0.19",
     "orientation": "default",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "dark",
-    "backgroundColor": "#000000",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F4F4F2",
     "newArchEnabled": true,
     "ios": {
       "bundleIdentifier": "com.pacerlabs.app",
@@ -16,7 +16,7 @@
         "CADisableMinimumFrameDurationOnPhone": true,
         "ITSAppUsesNonExemptEncryption": false
       },
-      "buildNumber": "19"
+      "buildNumber": "20"
     },
     "android": {
       "package": "com.pacerlabs.app",
@@ -27,7 +27,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": true,
-      "versionCode": 19
+      "versionCode": 20
     },
     "web": {
       "bundler": "metro",
@@ -41,7 +41,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#000000",
+          "backgroundColor": "#F4F4F2",
           "image": "./assets/splash-icon.png",
           "imageWidth": 140
         }

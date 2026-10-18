@@ -1,10 +1,9 @@
 import { useState, type ReactNode } from 'react';
 import { ActivityIndicator, Platform, RefreshControl, ScrollView, View, useWindowDimensions, type StyleProp, type ViewStyle } from 'react-native';
 import { Text } from './Text';
-import { LinearGradient } from 'expo-linear-gradient';
+import { AppBackground } from './AppBackground';
 import { Button } from './Button';
-import { MeshGradient } from './MeshGradient';
-import { GUTTER, useTheme, createStyles, pageGlow } from '@/theme';
+import { GUTTER, useTheme, createStyles } from '@/theme';
 import { ContentWidthProvider } from '@/lib/layout';
 import { FLOATING_BAR_SPACE } from './GlassTabBar';
 
@@ -22,22 +21,16 @@ type Props = {
 
 // Contenedor de pantalla: fondo negro, insets automáticos (cabecera nativa y barra de pestañas) y pull-to-refresh nativo.
 export function Screen({ children, refreshing, onRefresh, webTitle, contentStyle, keyboard, transparent }: Props) {
-  const { colors, scheme } = useTheme();
+  const { colors } = useTheme();
   const styles = useStyles();
   const [measured, setMeasured] = useState(0);
   const win = useWindowDimensions().width;
   const wide = (measured || win) >= 700;
   // iPad (y la vista web ancha) llevan la barra flotante de cristal encima del contenido: hay que dejarle sitio.
-  const floating = (Platform.OS === 'ios' && Platform.isPad) || (Platform.OS === 'web' && win >= 700);
+  const floating = (Platform.OS === 'ios' && Platform.isPad) || Platform.OS === 'web';
   return (
     <View onLayout={(e) => setMeasured(Math.round(e.nativeEvent.layout.width))} style={{ flex: 1, backgroundColor: transparent ? 'transparent' : colors.bg }}>
-      {/* Oscuro: negro puro. Claro: resplandor cálido de malla que se funde con el fondo hacia abajo (como en la referencia). */}
-      {scheme === 'light' && !transparent ? (
-        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 520 }}>
-          <MeshGradient mesh={pageGlow} />
-          <LinearGradient colors={['rgba(242,242,247,0)', colors.bg]} style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 260 }} />
-        </View>
-      ) : null}
+      {transparent ? null : <AppBackground />}
     <ScrollView
       style={[styles.scroll, { backgroundColor: 'transparent' }]}
       contentInsetAdjustmentBehavior="automatic"

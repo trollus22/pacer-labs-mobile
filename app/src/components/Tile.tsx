@@ -121,10 +121,11 @@ export function IconCircle({ icon, color, size = 44 }: { icon: Icon; color: stri
 /** Botón circular ↗: blanco sobre cristal, tinta sobre tarjeta clara, contorno sobre tarjeta oscura. */
 export function ArrowButton({ onGlass, size = 34 }: { onGlass: boolean; size?: number }) {
   const { colors, scheme } = useTheme();
-  const filled = onGlass ? '#FFFFFF' : scheme === 'light' ? '#111215' : null;
+  void onGlass; void scheme;
+  const filled = '#1A1A1A';
   return (
     <View accessibilityElementsHidden style={{ width: size, height: size, borderRadius: size / 2, alignItems: 'center', justifyContent: 'center', backgroundColor: filled ?? 'transparent', borderWidth: filled ? 0 : 1, borderColor: colors.hairline }}>
-      <MaterialCommunityIcons name="arrow-top-right" size={size * 0.5} color={onGlass ? '#111215' : scheme === 'light' ? '#FFFFFF' : colors.textSecondary} />
+      <MaterialCommunityIcons name="arrow-top-right" size={size * 0.5} color="#FFFFFF" />
     </View>
   );
 }
@@ -135,9 +136,9 @@ export function Tile({ title, value, unit, icon, variant = 'plain', span = 1, mi
   const inGrid = useContext(GridCtx) && !!pos;
   const mesh: Mesh | null = variant === 'glass' ? heroMesh : variant === 'warm' ? warmMesh : variant === 'plain' ? null : variant;
   const onGlass = !!mesh;
-  const fg = onGlass ? '#FFFFFF' : colors.text;
-  const fg2 = onGlass ? 'rgba(255,255,255,0.72)' : colors.textSecondary;
-  const ink = { ink: onGlass ? '#FFFFFF' : colors.ink, dim: onGlass ? 'rgba(255,255,255,0.32)' : colors.inkDim };
+  const fg = colors.text;
+  const fg2 = colors.textSecondary;
+  const ink = { ink: colors.ink, dim: onGlass ? 'rgba(17,17,17,0.3)' : colors.inkDim };
 
   const small = span === 1;
   // El título va junto al icono salvo en el héroe alto (2 filas), donde va debajo para dejar sitio al medidor.
@@ -208,8 +209,8 @@ export function ActionTile({ icon, title, note, onPress, variant = 'plain', icon
 }) {
   const { colors } = useTheme();
   const mesh: Mesh | null = variant === 'warm' ? warmMesh : variant === 'glass' ? heroMesh : null;
-  const fg = mesh ? '#FFFFFF' : colors.text;
-  const fg2 = mesh ? 'rgba(255,255,255,0.74)' : colors.textSecondary;
+  const fg = colors.text;
+  const fg2 = colors.textSecondary;
   return (
     <FocusIn index={index}>
       <PressableScale onPress={onPress} scale={0.98} accessibilityLabel={accessibilityLabel ?? title}>

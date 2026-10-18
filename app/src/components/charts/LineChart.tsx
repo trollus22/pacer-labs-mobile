@@ -126,7 +126,7 @@ export function LineChart({ title, dates, series, unit, decimals = 0, format, mi
                   return (
                     <G key={k}>
                       <Rect x={PAD.l} y={y1} width={W} height={y2 - y1} fill={b.color} opacity={0.1} />
-                      {b.label ? <SvgText x={PAD.l + 6} y={y1 + 12} fontSize={10} fontFamily="PlusJakartaSans_700Bold" fill={ink(b.color)} textAnchor="start">{b.label}</SvgText> : null}
+                      {b.label ? <SvgText x={PAD.l + 6} y={y1 + 12} fontSize={10} fontFamily="Inter_600SemiBold" fill={ink(b.color)} textAnchor="start">{b.label}</SvgText> : null}
                     </G>
                   );
                 })}
@@ -134,11 +134,11 @@ export function LineChart({ title, dates, series, unit, decimals = 0, format, mi
                 {ticks.map((t) => (
                   <G key={t}>
                     <Line x1={PAD.l} x2={PAD.l + W} y1={yAt(t)} y2={yAt(t)} stroke={colors.separator} strokeWidth={1} />
-                    <SvgText x={PAD.l - 6} y={yAt(t) + 3.5} fontSize={10} fontFamily="JetBrainsMono_500Medium" fill={colors.textTertiary} textAnchor="end">{compact(t, Number.isInteger(t) ? 0 : 1)}</SvgText>
+                    <SvgText x={PAD.l - 6} y={yAt(t) + 3.5} fontSize={10} fontFamily="Inter_500Medium" fill={colors.textTertiary} textAnchor="end">{compact(t, Number.isInteger(t) ? 0 : 1)}</SvgText>
                   </G>
                 ))}
                 {labelIdx.map((i, k) => (
-                  <SvgText key={i} x={xAt(i)} y={height + PAD.t + 16} fontSize={10} fontFamily="JetBrainsMono_500Medium" fill={colors.textTertiary}
+                  <SvgText key={i} x={xAt(i)} y={height + PAD.t + 16} fontSize={10} fontFamily="Inter_500Medium" fill={colors.textTertiary}
                     textAnchor={k === 0 && labelIdx.length > 1 ? 'start' : k === labelIdx.length - 1 && labelIdx.length > 1 ? 'end' : 'middle'}>{shortDate(dates[i])}</SvgText>
                 ))}
 

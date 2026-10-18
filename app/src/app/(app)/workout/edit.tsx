@@ -154,7 +154,7 @@ function WorkoutForm({ existing, athleteId, date: dateParam }: { existing?: Work
               <PressableScale key={t.id} scale={0.95} onPress={() => applyTemplate(t)} onLongPress={() => removeTemplate(t)} accessibilityLabel={`Plantilla ${t.title}. Mantén pulsado para borrar`} style={styles.tpl}>
                 <SportIcon sport={t.sport} size={30} />
                 <View style={{ gap: 3 }}>
-                  <Text variant="subhead" numberOfLines={1} style={{ maxWidth: 150, fontFamily: 'PlusJakartaSans_700Bold' }}>{t.title}</Text>
+                  <Text variant="subhead" numberOfLines={1} style={{ maxWidth: 150, fontFamily: 'Inter_600SemiBold' }}>{t.title}</Text>
                   <ZoneBar zone={t.zone} width={4} height={10} />
                 </View>
               </PressableScale>
@@ -176,7 +176,7 @@ function WorkoutForm({ existing, athleteId, date: dateParam }: { existing?: Work
               <PressableScale key={p.id} scale={0.95} onPress={() => applyPreset(p)} accessibilityLabel={`Sesión prediseñada: ${p.title}`} style={styles.tpl}>
                 <SportIcon sport={p.sport} size={30} />
                 <View style={{ gap: 3 }}>
-                  <Text variant="subhead" numberOfLines={1} style={{ maxWidth: 170, fontFamily: 'PlusJakartaSans_700Bold' }}>{p.title}</Text>
+                  <Text variant="subhead" numberOfLines={1} style={{ maxWidth: 170, fontFamily: 'Inter_600SemiBold' }}>{p.title}</Text>
                   <ZoneBar zone={p.zone} width={4} height={10} />
                 </View>
               </PressableScale>
@@ -190,7 +190,7 @@ function WorkoutForm({ existing, athleteId, date: dateParam }: { existing?: Work
       <View style={{ gap: 10 }}>
         <View style={styles.zoneHead}>
           <Text variant="caption" secondary>Intensidad</Text>
-          <Text variant="subhead" color={zones[zone - 1].color} style={{ fontFamily: 'PlusJakartaSans_700Bold' }}>{zone} · {zones[zone - 1].label}</Text>
+          <Text variant="subhead" color={zones[zone - 1].color} style={{ fontFamily: 'Inter_600SemiBold' }}>{zone} · {zones[zone - 1].label}</Text>
         </View>
         <View style={styles.zones}>
           {zones.map((z, i) => (
@@ -233,10 +233,10 @@ function WorkoutForm({ existing, athleteId, date: dateParam }: { existing?: Work
             <View style={styles.quick}>
               <PressableScale scale={0.95} onPress={() => { haptic.select(); setSelected(goodIds); }} style={[styles.pill, { backgroundColor: alpha(accent.green, 0.16) }]} accessibilityLabel="Seleccionar los recomendados">
                 <MaterialCommunityIcons name="check-circle" size={15} color={ink(accent.green)} />
-                <Text variant="subhead" color={accent.green} style={{ fontFamily: 'PlusJakartaSans_700Bold' }}>Recomendados ({goodIds.length})</Text>
+                <Text variant="subhead" color={accent.green} style={{ fontFamily: 'Inter_600SemiBold' }}>Recomendados ({goodIds.length})</Text>
               </PressableScale>
-              <PressableScale scale={0.95} onPress={() => { haptic.select(); setSelected(team.map((a) => a.id)); }} style={styles.pill}><Text variant="subhead" style={{ fontFamily: 'PlusJakartaSans_700Bold' }}>Todos</Text></PressableScale>
-              <PressableScale scale={0.95} onPress={() => { haptic.select(); setSelected([]); }} style={styles.pill}><Text variant="subhead" secondary style={{ fontFamily: 'PlusJakartaSans_700Bold' }}>Ninguno</Text></PressableScale>
+              <PressableScale scale={0.95} onPress={() => { haptic.select(); setSelected(team.map((a) => a.id)); }} style={styles.pill}><Text variant="subhead" style={{ fontFamily: 'Inter_600SemiBold' }}>Todos</Text></PressableScale>
+              <PressableScale scale={0.95} onPress={() => { haptic.select(); setSelected([]); }} style={styles.pill}><Text variant="subhead" secondary style={{ fontFamily: 'Inter_600SemiBold' }}>Ninguno</Text></PressableScale>
             </View>
           )}
           {!reco ? <Loading /> : (

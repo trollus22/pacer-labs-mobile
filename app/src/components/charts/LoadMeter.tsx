@@ -61,7 +61,7 @@ export function LoadMeter({ ratio, acute, chronic, enough }: { ratio: number | n
 const useStyles = createStyles((colors) => ({
   card: { gap: 12, padding: 18, backgroundColor: colors.surface, borderRadius: 32, borderCurve: 'continuous', borderWidth: 1, borderColor: colors.tileBorder },
   head: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
-  value: { fontFamily: 'PlusJakartaSans_300Light', fontSize: 42, lineHeight: 46, letterSpacing: -1.8, color: colors.text },
+  value: { fontFamily: 'Inter_300Light', fontSize: 42, lineHeight: 46, letterSpacing: -1.8, color: colors.text },
   bar: { flexDirection: 'row', height: 10, gap: 2 },
   marker: { position: 'absolute', top: -3, width: 14, height: 16, borderRadius: 7, backgroundColor: colors.text, borderWidth: 3, borderColor: colors.surface },
   labels: { flexDirection: 'row', marginTop: 8 },

@@ -1,15 +1,14 @@
 import { View } from 'react-native';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import Animated, { Keyframe, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/Button';
+import { AppBackground } from '@/components/AppBackground';
 import { Logo } from '@/components/Logo';
 import { Text } from '@/components/Text';
 import { PressableScale } from '@/components/PressableScale';
 import { GUTTER, fonts, useTheme, createStyles, ForceScheme } from '@/theme';
-import { alpha } from '@/lib/color';
 import { EASE_OUT } from '@/lib/motion';
 
 // Entrada escalonada: es la única pantalla que se ve una vez por sesión, así que aquí sí hay lugar para un gesto de marca.
@@ -20,7 +19,7 @@ const logoIn = new Keyframe({ from: { opacity: 0, transform: [{ scale: 0.86 }] }
 export default function Welcome() {
   return (
     <ForceScheme scheme="dark">
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <WelcomeScreen />
     </ForceScheme>
   );
@@ -34,7 +33,7 @@ function WelcomeScreen() {
   const at = (d: number) => (reduced ? undefined : rise(d));
   return (
     <View style={styles.root}>
-      <LinearGradient pointerEvents="none" colors={[alpha('#FF4B3A', 0.95), alpha('#B3173F', 0.6), alpha('#3A0B2A', 0.25), 'transparent']} locations={[0, 0.35, 0.65, 1]} style={styles.glow} />
+      <AppBackground metalHeight="72%" />
       <View style={[styles.content, { paddingTop: insets.top + 56, paddingBottom: insets.bottom + 20 }]}>
         <Animated.View entering={reduced ? undefined : logoIn} style={styles.brand}>
           <Logo width={92} />
@@ -73,7 +72,7 @@ const useStyles = createStyles((colors) => ({
   labs: { fontFamily: fonts.medium, fontSize: 20, letterSpacing: 4.5 },
   copy: { gap: 14, marginBottom: 36 },
   // Dos tonos, como en la referencia: la primera línea ligera y atenuada, la segunda regular y blanca.
-  headline: { fontFamily: fonts.light, fontSize: 48, lineHeight: 52, letterSpacing: -1.8, color: 'rgba(255,255,255,0.5)' },
+  headline: { fontFamily: fonts.light, fontSize: 48, lineHeight: 52, letterSpacing: -1.8, color: '#5C5C5C' },
   actions: { gap: 4 },
   link: { height: 52, alignItems: 'center', justifyContent: 'center' },
 }));

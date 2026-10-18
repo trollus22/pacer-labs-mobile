@@ -68,16 +68,16 @@ function Overview({ d, days, path, mine }: { d: Dashboard; days: number; path: s
         accessibilityLabel={`Recuperación ${cur.score ?? 'sin datos'} de 100. ${st.long}`}
         body={(
           <View style={{ alignItems: 'center', marginTop: 4 }}>
-            <ArcGauge value={cur.score} color={st.color} ink="#FFFFFF" dim="rgba(255,255,255,0.34)" size={250}>
-              <RNText style={{ fontFamily: fonts.light, fontSize: 76, lineHeight: 80, letterSpacing: -3, color: '#fff' }}>{cur.score ?? '—'}</RNText>
-              <Text variant="caption" color="rgba(255,255,255,0.6)" style={{ fontSize: 9.5 }}>de 100</Text>
+            <ArcGauge value={cur.score} color={st.color} ink="#111111" dim="rgba(17,17,17,0.22)" size={250}>
+              <RNText style={{ fontFamily: fonts.light, fontSize: 76, lineHeight: 80, letterSpacing: -3, color: '#111111' }}>{cur.score ?? '—'}</RNText>
+              <Text variant="caption" color="#5C5C5C" style={{ fontSize: 9.5 }}>de 100</Text>
             </ArcGauge>
           </View>
         )}
         note={(
           <View style={{ gap: 8, paddingTop: 4 }}>
             <StatusBadge label={st.long} icon={st.icon} color={st.color} onGlass />
-            <Text variant="footnote" color="rgba(255,255,255,0.78)" numberOfLines={2}>{cur.drivers[0]?.text ?? CONFIDENCE[cur.confidence]}</Text>
+            <Text variant="footnote" color="#3B3F43" numberOfLines={2}>{cur.drivers[0]?.text ?? CONFIDENCE[cur.confidence]}</Text>
           </View>
         )}
       />

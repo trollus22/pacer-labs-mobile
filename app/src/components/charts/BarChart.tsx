@@ -105,7 +105,7 @@ export function BarChart({ title, data, color, unit, decimals = 0, line, height 
                 {ticks.map((t) => (
                   <G key={t}>
                     <Line x1={PAD.l} x2={PAD.l + W} y1={yAt(t)} y2={yAt(t)} stroke={colors.separator} strokeWidth={1} />
-                    <SvgText x={PAD.l - 6} y={yAt(t) + 3.5} fontSize={10} fontFamily="JetBrainsMono_500Medium" fill={colors.textTertiary} textAnchor="end">{compact(t, Number.isInteger(t) ? 0 : 1)}</SvgText>
+                    <SvgText x={PAD.l - 6} y={yAt(t) + 3.5} fontSize={10} fontFamily="Inter_500Medium" fill={colors.textTertiary} textAnchor="end">{compact(t, Number.isInteger(t) ? 0 : 1)}</SvgText>
                   </G>
                 ))}
                 {data.map((d, i) => (
@@ -113,7 +113,7 @@ export function BarChart({ title, data, color, unit, decimals = 0, line, height 
                     opacity={active != null ? (active === i ? 1 : 0.38) : d.partial ? 0.55 : 1} />
                 ))}
                 {labelIdx.map((i) => (
-                  <SvgText key={`x${i}`} x={i === n - 1 && n > 1 ? PAD.l + W : xAt(i) + barW / 2} y={base + 16} fontSize={10} fontFamily="JetBrainsMono_500Medium" fill={colors.textTertiary} textAnchor={i === n - 1 && n > 1 ? 'end' : 'middle'}>{data[i].label}</SvgText>
+                  <SvgText key={`x${i}`} x={i === n - 1 && n > 1 ? PAD.l + W : xAt(i) + barW / 2} y={base + 16} fontSize={10} fontFamily="Inter_500Medium" fill={colors.textTertiary} textAnchor={i === n - 1 && n > 1 ? 'end' : 'middle'}>{data[i].label}</SvgText>
                 ))}
                 {line ? runs(line.values).map(([a, b], j) => {
                   const pts: Pt[] = [];

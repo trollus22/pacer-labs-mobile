@@ -11,7 +11,7 @@ export function Avatar({ name, size = 44 }: { name: string; size?: number }) {
   const c = colorFor(name);
   return (
     <View accessibilityElementsHidden style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: alpha(c, 0.18), alignItems: 'center', justifyContent: 'center' }}>
-      <Text variant={size > 60 ? 'title1' : 'subhead'} color={c} style={{ fontFamily: 'PlusJakartaSans_800ExtraBold' }}>{initials(name)}</Text>
+      <Text variant={size > 60 ? 'title1' : 'subhead'} color={c} style={{ fontFamily: 'Inter_600SemiBold' }}>{initials(name)}</Text>
     </View>
   );
 }

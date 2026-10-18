@@ -5,7 +5,6 @@ import { Button } from '@/components/Button';
 import { Chip } from '@/components/Chip';
 import { Screen } from '@/components/Screen';
 import { PressableScale } from '@/components/PressableScale';
-import { Segmented } from '@/components/Segmented';
 import { ActionTile } from '@/components/Tile';
 import { router } from 'expo-router';
 import { useQuery } from '@/lib/query';
@@ -20,8 +19,7 @@ export default function Profile() {
   const { colors } = useTheme();
   const styles = useStyles();
   const { user, team, teams, signOut } = useAuth();
-  const { pref, setPref } = useTheme();
-  const { data: wear } = useQuery<WearablesInfo>(user ? '/wearables' : null);
+    const { data: wear } = useQuery<WearablesInfo>(user ? '/wearables' : null);
   if (!user || !team) return null;
   const coach = user.role === 'coach';
 
@@ -53,15 +51,6 @@ export default function Profile() {
 
       {coach ? <ActionTile icon="account-group-outline" title="Mis equipos" note={`${teams.length} ${teams.length === 1 ? 'equipo' : 'equipos'} · activo: ${team.name}`} onPress={() => router.push('/teams')} /> : null}
       <ActionTile icon="trophy-outline" title="Mis deportes" note={user.sports.length ? user.sports.map((s) => sports[s].label).join(', ') : 'Elige los deportes que practicas.'} onPress={() => router.push('/sports')} />
-
-      <View style={{ gap: 10 }}>
-        <Text variant="caption" color={colors.textSecondary}>Apariencia</Text>
-        <Segmented
-          value={pref}
-          onChange={setPref}
-          options={[{ key: 'system', label: 'Sistema' }, { key: 'light', label: 'Claro' }, { key: 'dark', label: 'Oscuro' }]}
-        />
-      </View>
 
       {coach ? <Button title="Invitar atletas" kind="ghost" onPress={invite} /> : null}
       <Button title="Cerrar sesión" kind="danger" onPress={logout} />

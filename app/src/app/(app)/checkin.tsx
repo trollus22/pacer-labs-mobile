@@ -106,8 +106,8 @@ const Question = ({ title, children }: { title: string; children: React.ReactNod
 
 const useStyles = createStyles(() => ({
   readout: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  big: { fontFamily: 'JetBrainsMono_700Bold', fontSize: 52, lineHeight: 58, letterSpacing: -2, minWidth: 110 },
-  unit: { fontFamily: 'JetBrainsMono_500Medium', fontSize: 20, letterSpacing: 0 },
+  big: { fontFamily: 'Inter_600SemiBold', fontSize: 52, lineHeight: 58, letterSpacing: -2, minWidth: 110 },
+  unit: { fontFamily: 'Inter_500Medium', fontSize: 20, letterSpacing: 0 },
   optional: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   pair: { flexDirection: 'row', gap: 12 },
 }));

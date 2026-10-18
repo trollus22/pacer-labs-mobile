@@ -102,7 +102,7 @@ export function WeekView({ athleteId, hero, nav, onAdd, canLog, webTitle, top }:
           </View>
           {weeksFromNow !== 0 && (
             <PressableScale scale={0.94} onPress={() => { haptic.select(); setDir(weeksFromNow > 0 ? -1 : 1); setMonday(currentMonday); setSelected(today); }} style={styles.todayPill}>
-              <Text variant="subhead" style={{ fontFamily: 'PlusJakartaSans_700Bold' }}>Hoy</Text>
+              <Text variant="subhead" style={{ fontFamily: 'Inter_600SemiBold' }}>Hoy</Text>
             </PressableScale>
           )}
           <PressableScale scale={0.9} onPress={() => go(-1)} style={styles.circle} accessibilityLabel="Semana anterior">

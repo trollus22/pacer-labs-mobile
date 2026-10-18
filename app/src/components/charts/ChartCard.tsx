@@ -47,7 +47,7 @@ const useStyles = createStyles((colors) => ({
   head: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 },
   valueRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6 },
   // Cifra principal: proporcional (no tabular), misma fuente que el resto, nunca decorativa.
-  value: { fontFamily: 'PlusJakartaSans_300Light', fontSize: 42, lineHeight: 46, letterSpacing: -1.8, color: colors.text },
+  value: { fontFamily: 'Inter_300Light', fontSize: 42, lineHeight: 46, letterSpacing: -1.8, color: colors.text },
   unit: {},
   legend: { flexDirection: 'row', gap: 16, flexWrap: 'wrap', marginTop: 2 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },

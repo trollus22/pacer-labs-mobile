@@ -56,7 +56,7 @@ export function WeekGrid({ coach }: { coach?: boolean }) {
           <Text variant="footnote" secondary>{total} {total === 1 ? 'sesión' : 'sesiones'} · {done} hechas{total ? ` (${Math.round((done / total) * 100)} %)` : ''}</Text>
         </View>
         {monday !== mondayOf(today) ? (
-          <PressableScale scale={0.94} onPress={() => { haptic.select(); setMonday(mondayOf(today)); }} style={styles.pill}><Text variant="subhead" style={{ fontFamily: 'PlusJakartaSans_700Bold' }}>Hoy</Text></PressableScale>
+          <PressableScale scale={0.94} onPress={() => { haptic.select(); setMonday(mondayOf(today)); }} style={styles.pill}><Text variant="subhead" style={{ fontFamily: 'Inter_600SemiBold' }}>Hoy</Text></PressableScale>
         ) : null}
         <PressableScale scale={0.9} onPress={() => go(-1)} style={styles.circle} accessibilityLabel="Semana anterior"><MaterialCommunityIcons name="chevron-left" size={24} color={colors.text} /></PressableScale>
         <PressableScale scale={0.9} onPress={() => go(1)} style={styles.circle} accessibilityLabel="Semana siguiente"><MaterialCommunityIcons name="chevron-right" size={24} color={colors.text} /></PressableScale>
@@ -91,7 +91,7 @@ export function WeekGrid({ coach }: { coach?: boolean }) {
                     <View style={[styles.card, { borderColor: sports[w.sport].color + '66' }]}>
                       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
                         <SportIcon sport={w.sport} size={22} />
-                        <Text variant="footnote" numberOfLines={2} style={{ flex: 1, minWidth: 0, fontFamily: 'PlusJakartaSans_700Bold' }}>{w.title}</Text>
+                        <Text variant="footnote" numberOfLines={2} style={{ flex: 1, minWidth: 0, fontFamily: 'Inter_600SemiBold' }}>{w.title}</Text>
                       </View>
                       {coach ? <Text variant="footnote" secondary numberOfLines={1}>{w.athleteName}</Text> : null}
                       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -119,7 +119,7 @@ const useStyles = createStyles((colors) => ({
   grid: { flexDirection: 'row', gap: 8, alignItems: 'flex-start' },
   col: { flex: 1, gap: 8, padding: 8, minHeight: 360, backgroundColor: colors.surface, borderRadius: radius.lg, borderCurve: 'continuous', borderWidth: 1, borderColor: colors.tileBorder },
   colHead: { flexDirection: 'row', alignItems: 'baseline', gap: 6, paddingHorizontal: 2 },
-  dayNum: { fontFamily: 'PlusJakartaSans_300Light', fontSize: 26, lineHeight: 30, letterSpacing: -1, color: colors.text, flex: 1 },
+  dayNum: { fontFamily: 'Inter_300Light', fontSize: 26, lineHeight: 30, letterSpacing: -1, color: colors.text, flex: 1 },
   plus: { width: 26, height: 26, borderRadius: 13, borderWidth: 1, borderColor: colors.hairline, alignItems: 'center', justifyContent: 'center' },
   card: { gap: 5, padding: 8, borderRadius: 16, borderCurve: 'continuous', borderWidth: 1, backgroundColor: colors.surface2 },
 }));

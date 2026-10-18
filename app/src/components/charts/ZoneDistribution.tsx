@@ -50,7 +50,7 @@ export function ZoneDistribution({ minutes }: { minutes: number[] }) {
 const useStyles = createStyles((colors) => ({
   card: { gap: 12, padding: 18, backgroundColor: colors.surface, borderRadius: 32, borderCurve: 'continuous', borderWidth: 1, borderColor: colors.tileBorder },
   head: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
-  value: { fontFamily: 'PlusJakartaSans_300Light', fontSize: 42, lineHeight: 46, letterSpacing: -1.8, color: colors.text },
+  value: { fontFamily: 'Inter_300Light', fontSize: 42, lineHeight: 46, letterSpacing: -1.8, color: colors.text },
   // Los segmentos se separan con un hueco de 2 px del color de la superficie (sin bordes).
   bar: { flexDirection: 'row', height: 14, gap: 2, borderRadius: 7, overflow: 'hidden' },
   rows: { gap: 8 },

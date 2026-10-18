@@ -64,7 +64,7 @@ export function ReadinessCard({ current }: { current: Dashboard['current'] }) {
 const useStyles = createStyles((colors) => ({
   card: { gap: 14, padding: 18, backgroundColor: colors.surface, borderRadius: 32, borderCurve: 'continuous', borderWidth: 1, borderColor: colors.tileBorder },
   top: { flexDirection: 'row', alignItems: 'center', gap: 18 },
-  score: { fontFamily: 'PlusJakartaSans_300Light', fontSize: 40, lineHeight: 44, letterSpacing: -1.6, color: colors.text },
+  score: { fontFamily: 'Inter_300Light', fontSize: 40, lineHeight: 44, letterSpacing: -1.6, color: colors.text },
   side: { flex: 1, gap: 8 },
   parts: { gap: 6, marginTop: 4 },
   part: { flexDirection: 'row', alignItems: 'center', gap: 8 },
