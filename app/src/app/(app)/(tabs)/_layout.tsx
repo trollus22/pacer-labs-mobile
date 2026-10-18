@@ -31,10 +31,6 @@ export default function TabsLayout() {
         <NativeTabs.Trigger.Label>Forma</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="waveform.path.ecg" md="monitor_heart" />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="(panel)" hidden={!coach}>
-        <NativeTabs.Trigger.Label>Panel</NativeTabs.Trigger.Label>
-        <NativeTabs.Trigger.Icon sf="chart.xyaxis.line" md="monitoring" />
-      </NativeTabs.Trigger>
       <NativeTabs.Trigger name="(you)" hidden={!coach}>
         <NativeTabs.Trigger.Label>Tú</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="figure.run" md="directions_run" />

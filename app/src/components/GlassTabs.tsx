@@ -4,7 +4,7 @@ import { GlassTabBar } from './GlassTabBar';
 import { useTheme } from '@/theme';
 import { tabItems } from '@/lib/tabs';
 
-const GROUPS = ['(home)', '(calendar)', '(form)', '(panel)', '(you)', '(profile)'] as const;
+const GROUPS = ['(home)', '(calendar)', '(form)', '(you)', '(profile)'] as const;
 
 /**
  * Pestañas con la barra flotante de Liquid Glass (iPad y vista web ancha). El navegador no dibuja barra propia

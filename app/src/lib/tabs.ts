@@ -6,7 +6,6 @@ export function tabItems(coach: boolean, wide: boolean): TabItem[] {
     ? [
       { name: '(home)', label: 'Equipo', icon: 'account-group' },
       ...(wide ? [{ name: '(calendar)', label: 'Calendario', icon: 'calendar-month' } as TabItem] : []),
-      { name: '(panel)', label: 'Panel', icon: 'chart-line' },
       { name: '(you)', label: 'Tú', icon: 'run-fast' },
       { name: '(profile)', label: 'Perfil', icon: 'account-circle' },
     ]

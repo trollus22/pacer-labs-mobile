@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { Share, StyleSheet, View } from 'react-native';
 import { router } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -33,7 +33,7 @@ const ALERT: Record<AthleteAlert, { label: (a: AthleteSummary) => string; color:
 
 const rowIn = (i: number) => FadeInDown.duration(300).delay(Math.min(i, 8) * 45).easing(EASE_OUT);
 
-export function TeamHome() {
+export function TeamHome({ top }: { top?: ReactNode }) {
   const wide = useContentWidth() >= 760;
   const xwide = useXWide();
   const styles = useStyles();
@@ -51,6 +51,7 @@ export function TeamHome() {
 
   return (
     <Screen refreshing={refreshing} onRefresh={refresh} webTitle="Equipo">
+      {top}
       {error && !data ? <ErrorState message={error.message} onRetry={refresh} /> : loading ? <Loading /> : data && (
         <>
           <TileGrid>

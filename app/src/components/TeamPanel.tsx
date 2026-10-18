@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
@@ -24,12 +24,13 @@ type Days = '7' | '28' | '90';
 const rowIn = (i: number) => FadeInDown.duration(300).delay(Math.min(i, 8) * 40).easing(EASE_OUT);
 
 /** Pestaña «Panel» del entrenador: cómo está el equipo hoy y cómo evoluciona su carga y su cumplimiento. */
-export function TeamPanel() {
+export function TeamPanel({ top }: { top?: ReactNode }) {
   const [days, setDays] = useState<Days>('28');
   const { kept: d, stale, error, refreshing, refresh } = useQuery<TeamDashboard>(`/dashboard/team?date=${todayISO()}&days=${days}`);
 
   return (
     <Screen refreshing={refreshing} onRefresh={refresh} webTitle="Panel">
+      {top}
       <View style={{ maxWidth: 440, width: '100%' }}><Segmented value={days} onChange={setDays} options={[{ key: '7', label: '7 días' }, { key: '28', label: '4 semanas' }, { key: '90', label: '12 semanas' }]} /></View>
       {error && !d ? <ErrorState message={error.message} onRetry={refresh} /> : !d ? <Loading /> : <Body d={d} days={Number(days)} stale={stale} />}
     </Screen>

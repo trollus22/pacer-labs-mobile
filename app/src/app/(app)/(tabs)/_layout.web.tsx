@@ -27,7 +27,6 @@ export default function TabsLayout() {
       <Tabs.Screen name="(home)" options={{ title: coach ? 'Equipo' : 'Hoy', tabBarIcon: ({ color }) => <MaterialCommunityIcons name={coach ? 'account-group' : 'lightning-bolt'} size={26} color={color} /> }} />
       <Tabs.Screen name="(calendar)" options={{ title: 'Calendario', href: coach && !wide ? null : undefined, tabBarIcon: ({ color }) => <MaterialCommunityIcons name="calendar-month" size={26} color={color} /> }} />
       <Tabs.Screen name="(form)" options={{ title: 'Forma', href: coach ? null : undefined, tabBarIcon: ({ color }) => <MaterialCommunityIcons name="heart-pulse" size={26} color={color} /> }} />
-      <Tabs.Screen name="(panel)" options={{ title: 'Panel', href: coach ? undefined : null, tabBarIcon: ({ color }) => <MaterialCommunityIcons name="chart-line" size={26} color={color} /> }} />
       <Tabs.Screen name="(you)" options={{ title: 'Tú', href: coach ? undefined : null, tabBarIcon: ({ color }) => <MaterialCommunityIcons name="run-fast" size={26} color={color} /> }} />
       <Tabs.Screen name="(profile)" options={{ title: 'Perfil', tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account-circle" size={26} color={color} /> }} />
     </Tabs>
