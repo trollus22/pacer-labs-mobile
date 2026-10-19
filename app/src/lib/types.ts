@@ -19,6 +19,8 @@ export type Workout = {
 export type Comment = { id: string; userId: string; author: string; role: Role; body: string; createdAt: string };
 
 export type AthleteAlert = 'missed' | 'high_rpe' | 'low_feeling' | 'low_readiness';
+export type AiSummary = { text: string; model: string; generatedAt: string; cached: boolean };
+
 export type AthleteSummary = {
   id: string; name: string; planned: number; done: number; skipped: number; missed: number;
   lastFeeling: number | null; lastRpe: number | null; alerts: AthleteAlert[]; readiness: ReadinessState;

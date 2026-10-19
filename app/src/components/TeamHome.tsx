@@ -13,6 +13,7 @@ import { ErrorState, Loading, Screen, Section } from './Screen';
 import { StatusBadge } from './StatusBadge';
 import { Text } from './Text';
 import { MiniRings } from './TodayRings';
+import { AiSummary } from './AiSummary';
 import { feelings, radius, accent, useTheme, createStyles } from '@/theme';
 import { useContentWidth, useXWide } from '@/lib/layout';
 import { STATUS } from '@/lib/status';
@@ -66,6 +67,8 @@ export function TeamHome({ top }: { top?: ReactNode }) {
             icon="plus" title="Nuevo entreno" note="Créalo una vez y envíalo a varios atletas, con recomendación según su recuperación."
             onPress={() => router.push('/workout/edit')} accessibilityLabel="Crear un entreno nuevo y enviarlo a varios atletas"
           />
+
+          {data.athletes.length > 0 ? <AiSummary /> : null}
 
           {data.athletes.length === 0 ? (
             <View style={styles.card}>
