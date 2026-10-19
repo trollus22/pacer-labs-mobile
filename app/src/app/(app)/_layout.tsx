@@ -52,6 +52,9 @@ export default function AppLayout() {
       <Stack.Screen name="teams" options={{ ...sheetOpts({ sheetAllowedDetents: [0.7, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 28, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
       <Stack.Screen name="pacer" options={{ animation: reduced ? 'fade' : 'default', fullScreenGestureEnabled: true, contentStyle: { backgroundColor: colors.bg } }} />
       <Stack.Screen name="pacer-sheet" options={{ ...sheetOpts({ sheetAllowedDetents: [0.62, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 32, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
+      <Stack.Screen name="market/checkout" options={{ ...sheetOpts({ sheetAllowedDetents: [0.86, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 32, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
+      <Stack.Screen name="market/review/[coachId]" options={{ ...sheetOpts({ sheetAllowedDetents: [0.9, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 32, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
+      <Stack.Screen name="market/new-event" options={{ presentation: 'modal', gestureEnabled: true, contentStyle: { backgroundColor: colors.surface }, animation: reduced ? 'fade' : 'default' }} />
       <Stack.Screen name="log/[id]" options={{ ...sheetOpts({ sheetAllowedDetents: [0.94], sheetGrabberVisible: true, sheetCornerRadius: 28, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
     </Stack>
   );

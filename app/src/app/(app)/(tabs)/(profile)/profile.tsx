@@ -50,6 +50,9 @@ export default function Profile() {
       })()}
 
       {coach ? <ActionTile icon="account-group-outline" title="Mis equipos" note={`${teams.length} ${teams.length === 1 ? 'equipo' : 'equipos'} · activo: ${team.name}`} onPress={() => router.push('/teams')} /> : null}
+      {coach
+        ? <ActionTile icon="storefront-outline" title="Mi perfil en el mercado" note="Perfil público, planes, plazas y comisión." onPress={() => router.push('/market/manage')} />
+        : <ActionTile icon="whistle-outline" title="Entrenadores y eventos" note={team.coach ? 'Quedadas y eventos cerca de ti, y otros entrenadores.' : 'Encuentra entrenador o apúntate a una quedada.'} onPress={() => router.push('/market')} />}
       <ActionTile icon="trophy-outline" title="Mis deportes" note={user.sports.length ? user.sports.map((s) => sports[s].label).join(', ') : 'Elige los deportes que practicas.'} onPress={() => router.push('/sports')} />
 
       {coach ? <Button title="Invitar atletas" kind="ghost" onPress={invite} /> : null}
