@@ -4,6 +4,7 @@ import { Ring } from './Ring';
 import { StatusBadge } from './StatusBadge';
 import { Text } from './Text';
 import { PressableScale } from './PressableScale';
+import { AskPacer } from './pacer/AskPacer';
 import { accent, createStyles, fonts, useTheme } from '@/theme';
 import { alpha } from '@/lib/color';
 import { todayISO } from '@/lib/dates';
@@ -17,6 +18,11 @@ const lastOf = (xs: (number | null)[]) => { for (let i = xs.length - 1; i >= 0; 
 
 const HEADLINE: Record<ReadinessStatus, string> = {
   ready: 'Día verde', caution: 'Ve con cuidado', rest: 'Frena hoy', unknown: 'Aún sin datos',
+};
+
+// Pregunta sugerida a Pacer según el estado del día.
+const ASK: Record<ReadinessStatus, string> = {
+  ready: '¿Cómo aprovecho el día?', caution: '¿Por qué estoy en precaución?', rest: '¿Por qué debo descansar hoy?', unknown: '',
 };
 
 // Cabecera de «Hoy» del atleta: tres anillos (esfuerzo, recuperación y sueño) y el consejo del día con sus motivos.
@@ -76,6 +82,7 @@ export function TodayRings({ path = '/me/dashboard' }: { path?: string }) {
           <StatusBadge label={st.label} icon={st.icon} color={ink(st.color)} small />
         </View>
         <Text variant="subhead" color={colors.textSecondary}>{body}</Text>
+        {cur.status !== 'unknown' ? <View style={{ marginTop: 4 }}><AskPacer q={ASK[cur.status]} topic="recovery" /></View> : null}
       </View>
     </View>
   );

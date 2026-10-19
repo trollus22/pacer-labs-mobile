@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import { router } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { GlassTabs } from '@/components/GlassTabs';
 import { fonts, accent } from '@/theme';
@@ -37,6 +38,12 @@ export default function TabsLayout() {
       <NativeTabs.Trigger name="(profile)">
         <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon sf="person.crop.circle.fill" md="person" />
+      </NativeTabs.Trigger>
+      {/* Pacer: en iOS 26 el rol «search» lo pinta como círculo aparte, a la derecha de las pestañas. No se selecciona nunca
+          (disabled): el toque abre el chat a pantalla completa por encima. */}
+      <NativeTabs.Trigger name="pacer-tab" role="search" disabled listeners={{ tabPress: () => router.push('/pacer') }} accessibilityLabel="Pacer, asistente">
+        <NativeTabs.Trigger.Label>Pacer</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon sf="sparkles" md="auto_awesome" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );

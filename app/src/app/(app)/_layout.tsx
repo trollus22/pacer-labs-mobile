@@ -50,6 +50,8 @@ export default function AppLayout() {
       <Stack.Screen name="delete-account" options={{ ...sheetOpts({ sheetAllowedDetents: [0.9, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 28, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
       <Stack.Screen name="sports" options={{ ...sheetOpts({ sheetAllowedDetents: [0.8, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 28, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
       <Stack.Screen name="teams" options={{ ...sheetOpts({ sheetAllowedDetents: [0.7, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 28, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
+      <Stack.Screen name="pacer" options={{ animation: reduced ? 'fade' : 'default', fullScreenGestureEnabled: true, contentStyle: { backgroundColor: colors.bg } }} />
+      <Stack.Screen name="pacer-sheet" options={{ ...sheetOpts({ sheetAllowedDetents: [0.62, 0.96], sheetGrabberVisible: true, sheetCornerRadius: 32, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
       <Stack.Screen name="log/[id]" options={{ ...sheetOpts({ sheetAllowedDetents: [0.94], sheetGrabberVisible: true, sheetCornerRadius: 28, contentStyle: { backgroundColor: colors.surface } }), animation: reduced ? 'fade' : 'default' }} />
     </Stack>
   );

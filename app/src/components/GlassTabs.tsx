@@ -18,6 +18,7 @@ export function GlassTabs({ coach, wide = true }: { coach: boolean; wide?: boole
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <Tabs tabBar={() => null} screenOptions={{ headerShown: false, animation: 'none', sceneStyle: { backgroundColor: colors.bg } }}>
         {GROUPS.map((g) => <Tabs.Screen key={g} name={g} options={{ href: shown.has(g) ? undefined : null }} />)}
+        <Tabs.Screen name="pacer-tab" options={{ href: null }} />
       </Tabs>
       <GlassTabBar items={items} compact={!wide} />
     </View>

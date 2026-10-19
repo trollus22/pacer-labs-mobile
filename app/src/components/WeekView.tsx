@@ -10,6 +10,7 @@ import { Tile, TileGrid } from './Tile';
 import { Text } from './Text';
 import { PressableScale } from './PressableScale';
 import { Empty } from './Empty';
+import { AskPacer } from './pacer/AskPacer';
 import { SendToWatch } from './SendToWatch';
 import { WorkoutHero, WorkoutRow } from './WorkoutCards';
 import { radius, sports, accent, useTheme, createStyles } from '@/theme';
@@ -157,7 +158,12 @@ export function WeekView({ athleteId, hero, nav, onAdd, canLog, webTitle, top }:
                     workout={w}
                     onPress={() => open(w)}
                     cta={canLog && w.status === 'planned' && w.date <= today ? { label: 'Registrar entreno', onPress: () => router.push(`/log/${w.id}`) } : undefined}
-                    extra={canLog && w.status === 'planned' ? <SendToWatch workoutId={w.id} onGlass /> : undefined}
+                    extra={canLog && w.status === 'planned' ? (
+                      <View style={{ gap: 8 }}>
+                        <SendToWatch workoutId={w.id} onGlass />
+                        {w.date === today ? <AskPacer q="¿Cómo lo enfoco hoy?" topic="today" w={{ title: w.title, sport: w.sport, zone: w.zone, durationMin: w.durationMin }} onColor /> : null}
+                      </View>
+                    ) : undefined}
                   />
                 ) : (
                   <WorkoutRow key={w.id} workout={w} onPress={() => open(w)} />

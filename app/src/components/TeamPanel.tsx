@@ -18,6 +18,7 @@ import { CSS_EASE_OUT, EASE_OUT } from '@/lib/motion';
 import { useQuery } from '@/lib/query';
 import { useContentWidth } from '@/lib/layout';
 import { STATUS } from '@/lib/status';
+import { AskPacer } from './pacer/AskPacer';
 import type { ReadinessStatus, TeamDashboard } from '@/lib/types';
 
 type Days = '7' | '28' | '90';
@@ -31,6 +32,7 @@ export function TeamPanel({ top }: { top?: ReactNode }) {
   return (
     <Screen refreshing={refreshing} onRefresh={refresh} webTitle="Panel">
       {top}
+      <View style={{ maxWidth: 440, width: '100%' }}><AskPacer q="Resume quién necesita atención hoy" topic="team" /></View>
       <View style={{ maxWidth: 440, width: '100%' }}><Segmented value={days} onChange={setDays} options={[{ key: '7', label: '7 días' }, { key: '28', label: '4 semanas' }, { key: '90', label: '12 semanas' }]} /></View>
       {error && !d ? <ErrorState message={error.message} onRetry={refresh} /> : !d ? <Loading /> : <Body d={d} days={Number(days)} stale={stale} />}
     </Screen>
