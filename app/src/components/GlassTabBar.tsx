@@ -25,7 +25,8 @@ export function GlassTabBar({ items, compact }: { items: TabItem[]; compact?: bo
   const segments = useSegments() as string[];
   const current = items.find((it) => segments.includes(it.name))?.name;
   const glass = Platform.OS === 'ios' && isLiquidGlassAvailable();
-  const shape = { borderRadius: 34, borderCurve: 'continuous' as const, overflow: 'hidden' as const };
+  const round = { borderRadius: 34, borderCurve: 'continuous' as const };
+  const shape = { ...round, overflow: 'hidden' as const };
 
   const bar = (
     <View style={{ flexDirection: 'row', padding: 6, gap: 4 }}>
@@ -53,8 +54,8 @@ export function GlassTabBar({ items, compact }: { items: TabItem[]; compact?: bo
   const fill = { position: 'absolute' as const, top: 0, left: 0, right: 0, bottom: 0 };
   return (
     <View pointerEvents="box-none" style={{ position: 'absolute', left: 0, right: 0, bottom: Math.max(insets.bottom, 12) + 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, zIndex: 10 }}>
-      <View style={[shape, glass ? { backgroundColor: scheme === 'dark' ? 'rgba(22,24,31,0.28)' : 'rgba(255,255,255,0.3)', shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 20, shadowOffset: { width: 0, height: 8 } } : { backgroundColor: solid, borderWidth: 1, borderColor: web ? 'rgba(255,255,255,0.75)' : colors.hairline }, webGlass]}>
-        {glass ? <GlassView glassEffectStyle="regular" isInteractive colorScheme={scheme} style={[fill, shape]} /> : null}
+      <View style={[glass ? { ...round, shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 20, shadowOffset: { width: 0, height: 8 } } : { ...shape, backgroundColor: solid, borderWidth: 1, borderColor: web ? 'rgba(255,255,255,0.75)' : colors.hairline }, webGlass]}>
+        {glass ? <GlassView glassEffectStyle="regular" isInteractive colorScheme={scheme} style={[fill, round]} /> : null}
         {!glass && Platform.OS === 'ios' ? <BlurView intensity={60} tint={scheme === 'dark' ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'} style={fill} /> : null}
         {bar}
       </View>
