@@ -7,7 +7,7 @@ import { Segmented } from '@/components/Segmented';
 import { Text } from '@/components/Text';
 import { Empty } from '@/components/Empty';
 import { ErrorState, Loading } from '@/components/Screen';
-import { EventCard, FilterChips, GlassIcon, InkButton, Initials, MarketHeader, ReviewCard, Stars, StickyBar, Tag, ToneGradient, useStyles } from '@/components/market/ui';
+import { DemoBanner, EventCard, FilterChips, GlassIcon, InkButton, Initials, MarketHeader, ReviewCard, Stars, StickyBar, Tag, ToneGradient, useStyles } from '@/components/market/ui';
 import { createStyles, fonts, sports, tone, useTheme } from '@/theme';
 import { api } from '@/lib/api';
 import { useQuery, invalidateAll } from '@/lib/query';
@@ -30,7 +30,7 @@ export default function CoachProfile() {
   if (!c) return <View style={{ flex: 1, backgroundColor: colors.bg }}><MarketHeader /><Loading /></View>;
   const name = firstName(c.name);
 
-  const cta = c.isMyCoach ? null : c.request?.status === 'pending' ? 'pending' : c.spotsLeft <= 0 ? 'full' : 'plans';
+  const cta = c.isMyCoach ? null : c.demo ? 'demo' : c.request?.status === 'pending' ? 'pending' : c.spotsLeft <= 0 ? 'full' : 'plans';
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <ToneGradient color={c.tone} style={styles.hero} />
@@ -52,18 +52,19 @@ export default function CoachProfile() {
           <View style={styles.sep} />
           <Stat value={`<${c.responseHours} h`} label="Respuesta" />
         </View>
+        {c.demo ? <DemoBanner text="Perfil de ejemplo: así se verá un entrenador en PACER LABS. Todavía no acepta atletas." /> : null}
         <Segmented value={tab} onChange={setTab} options={[{ key: 'profile', label: 'Perfil' }, { key: 'reviews', label: `Reseñas · ${c.rating.count}` }, { key: 'events', label: `Eventos · ${c.events.length}` }]} />
         {tab === 'profile' ? <ProfileTab c={c} /> : tab === 'reviews' ? <ReviewsTab c={c} /> : <EventsTab c={c} />}
       </ScrollView>
       {cta ? (
         <StickyBar>
           <View style={{ flex: 1 }}>
-            {cta === 'pending' ? <Text variant="headline">Solicitud enviada</Text> : cta === 'full' ? <Text variant="headline">Sin plazas ahora</Text> : (
+            {cta === 'demo' ? <Text variant="headline" style={{ fontFamily: fonts.medium }}>{c.priceFrom != null ? eur(c.priceFrom) : '—'}<Text variant="footnote" tertiary> / mes</Text></Text> : cta === 'pending' ? <Text variant="headline">Solicitud enviada</Text> : cta === 'full' ? <Text variant="headline">Sin plazas ahora</Text> : (
               <Text variant="headline" style={{ fontFamily: fonts.medium }}>{c.priceFrom != null ? eur(c.priceFrom) : '—'}<Text variant="footnote" tertiary> / mes</Text></Text>
             )}
-            <Text variant="footnote" tertiary style={{ fontSize: 12 }}>{cta === 'pending' ? `${name} te responderá en < 48 h` : cta === 'full' ? 'Mira sus eventos mientras tanto' : '1.ª semana gratis'}</Text>
+            <Text variant="footnote" tertiary style={{ fontSize: 12 }}>{cta === 'demo' ? 'Perfil de ejemplo' : cta === 'pending' ? `${name} te responderá en < 48 h` : cta === 'full' ? 'Mira sus eventos mientras tanto' : '1.ª semana gratis'}</Text>
           </View>
-          {cta === 'plans' ? <InkButton title="Ver planes" onPress={() => router.push(`/market/plans/${c.id}`)} /> : cta === 'pending' && c.request ? <InkButton ghost title="Ver solicitud" onPress={() => router.push(`/market/request/${c.request!.id}`)} /> : <InkButton ghost title="Eventos" onPress={() => setTab('events')} />}
+          {cta === 'plans' || cta === 'demo' ? <InkButton title="Ver planes" onPress={() => router.push(`/market/plans/${c.id}`)} /> : cta === 'pending' && c.request ? <InkButton ghost title="Ver solicitud" onPress={() => router.push(`/market/request/${c.request!.id}`)} /> : <InkButton ghost title="Eventos" onPress={() => setTab('events')} />}
         </StickyBar>
       ) : (
         <StickyBar>

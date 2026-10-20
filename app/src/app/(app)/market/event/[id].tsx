@@ -5,7 +5,7 @@ import Svg, { Circle, Path } from 'react-native-svg';
 import { Text } from '@/components/Text';
 import { ErrorState, Loading } from '@/components/Screen';
 import { PressableScale } from '@/components/PressableScale';
-import { GlassIcon, InkButton, Initials, MarketHeader, StickyBar, Tag, ToneGradient, useStyles as useCardStyles, weekday } from '@/components/market/ui';
+import { DemoBanner, GlassIcon, InkButton, Initials, MarketHeader, StickyBar, Tag, ToneGradient, useStyles as useCardStyles, weekday } from '@/components/market/ui';
 import { createStyles, fonts, useTheme } from '@/theme';
 import { useQuery } from '@/lib/query';
 import { firstName } from '@/lib/format';
@@ -35,6 +35,7 @@ export default function EventDetail() {
           <Text variant="caption" color="rgba(255,255,255,0.85)" style={{ fontSize: 11.5 }}>{formatLong(e.date)} · {e.start}–{e.end}</Text>
           <Text variant="title1" color="#fff" style={{ fontSize: 28, lineHeight: 32 }}>{e.title}</Text>
         </View>
+        {e.demo ? <DemoBanner text="Evento de ejemplo: así se verá una quedada en PACER LABS. Todavía no admite inscripciones." /> : null}
         <View style={[card.card, { padding: 0, overflow: 'hidden' }]}>
           <MapSketch />
           <View style={{ flexDirection: 'row', alignItems: 'center', padding: 14, gap: 10 }}>
@@ -82,7 +83,7 @@ export default function EventDetail() {
               <Text variant="headline" style={{ fontFamily: fonts.medium }}>{e.myPrice ? eur(e.myPrice) : e.price ? 'Gratis para ti' : 'Gratis'}</Text>
               <Text variant="footnote" tertiary style={{ fontSize: 12 }} numberOfLines={1}>{e.isCoachAthlete && e.freeForAthletes ? `Eres atleta de ${coach}` : e.freeForAthletes && e.price ? `Gratis para atletas de ${coach}` : `${e.spotsLeft} plazas libres`}</Text>
             </View>
-            <InkButton title={e.spotsLeft ? 'Apuntarme' : 'Completo'} disabled={!e.spotsLeft} onPress={() => router.push({ pathname: '/market/checkout', params: { kind: 'event', eventId: e.id } })} />
+            <InkButton title={e.demo ? 'Ejemplo' : e.spotsLeft ? 'Apuntarme' : 'Completo'} disabled={!e.spotsLeft || e.demo} onPress={() => router.push({ pathname: '/market/checkout', params: { kind: 'event', eventId: e.id } })} />
           </>
         )}
       </StickyBar>

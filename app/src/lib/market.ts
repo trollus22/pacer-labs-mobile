@@ -7,6 +7,8 @@ export type MarketPlan = { id: string; kind: 'monthly' | 'plus' | 'block'; title
 export type MarketCoach = {
   id: string; name: string; initials: string; tone: string; headline: string; city: string; modes: string[]; sports: Sport[]; tags: string[];
   verified: boolean; responseHours: number; rating: number | null; reviewCount: number; priceFrom: number | null; spotsLeft: number; accepting: boolean; athletes: number;
+  /** Perfil de ejemplo: se enseña con su etiqueta y no admite solicitudes. */
+  demo: boolean;
 };
 export type RatingSummary = { avg: number | null; count: number; aspects: { planning: number | null; care: number | null; results: number | null }; stars: number[] };
 export type MarketReview = {
@@ -14,7 +16,7 @@ export type MarketReview = {
   body: string; progress: string | null; sport: Sport | null; reply: string | null; helpful: number; createdAt: string;
 };
 export type MarketEvent = {
-  id: string; coachId: string; coachName: string; coachInitials: string; coachTone: string; kind: 'group' | 'clinic' | 'trail' | 'test'; sport: Sport;
+  id: string; coachId: string; coachName: string; coachInitials: string; coachTone: string; demo: boolean; kind: 'group' | 'clinic' | 'trail' | 'test'; sport: Sport;
   title: string; description: string; date: string; start: string; end: string; place: string; city: string; distanceKm: number | null;
   capacity: number; signups: number; spotsLeft: number; price: number; freeForAthletes: boolean; open: boolean; tags: string[]; paceGroups: string[];
   session: string; zone: number; durationMin: number; myPrice: number; isCoachAthlete: boolean;

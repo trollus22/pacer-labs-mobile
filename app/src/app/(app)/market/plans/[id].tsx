@@ -61,9 +61,9 @@ export default function Plans() {
       <StickyBar>
         <View style={{ flex: 1 }}>
           <Text variant="headline" style={{ fontFamily: fonts.medium }} numberOfLines={1}>{plan?.title ?? 'Elige un plan'}</Text>
-          <Text variant="footnote" tertiary style={{ fontSize: 12 }}>{plan ? (plan.kind === 'block' ? `${eur(plan.price)} en total` : `${eur(plan.price)}/mes · 1.ª semana gratis`) : ''}</Text>
+          <Text variant="footnote" tertiary style={{ fontSize: 12 }}>{c.demo ? 'Perfil de ejemplo: no admite solicitudes' : plan ? (plan.kind === 'block' ? `${eur(plan.price)} en total` : `${eur(plan.price)}/mes · 1.ª semana gratis`) : ''}</Text>
         </View>
-        <InkButton title="Continuar" disabled={!plan} onPress={() => plan && router.push({ pathname: '/market/checkout', params: { kind: 'plan', planId: plan.id, coachId: c.id } })} />
+        <InkButton title={c.demo ? 'Ejemplo' : 'Continuar'} disabled={!plan || c.demo} onPress={() => plan && router.push({ pathname: '/market/checkout', params: { kind: 'plan', planId: plan.id, coachId: c.id } })} />
       </StickyBar>
     </View>
   );

@@ -97,7 +97,10 @@ export function CoachCard({ c, onPress }: { c: MarketCoach; onPress: () => void 
         <View style={styles.row}>
           <Initials initials={c.initials} color={c.tone} size={54} verified={c.verified} />
           <View style={{ flex: 1, gap: 2 }}>
-            <Text variant="headline" style={{ fontFamily: fonts.medium, fontSize: 16.5 }} numberOfLines={1}>{c.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <Text variant="headline" style={{ fontFamily: fonts.medium, fontSize: 16.5, flexShrink: 1 }} numberOfLines={1}>{c.name}</Text>
+              {c.demo ? <DemoTag /> : null}
+            </View>
             <Text variant="footnote" tertiary numberOfLines={2} style={{ fontSize: 12.5 }}>{c.headline}</Text>
           </View>
           {c.rating != null ? (
@@ -153,7 +156,7 @@ export function EventCard({ e, onPress, showCoach = true }: { e: MarketEvent; on
         <ToneGradient color={color} style={{ height: 108, padding: 12 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <DateBadge date={e.date} />
-            {e.ticket ? <Pill label="Apuntado" icon="check" /> : e.spotsLeft <= 8 ? <Pill label={e.spotsLeft ? `Quedan ${e.spotsLeft} plazas` : 'Completo'} /> : null}
+            {e.demo ? <Pill label="Evento de ejemplo" /> : e.ticket ? <Pill label="Apuntado" icon="check" /> : e.spotsLeft <= 8 ? <Pill label={e.spotsLeft ? `Quedan ${e.spotsLeft} plazas` : 'Completo'} /> : null}
           </View>
         </ToneGradient>
         <View style={{ padding: 14, gap: 3 }}>
@@ -277,6 +280,27 @@ export function SectionTitle({ title, right }: { title: string; right?: ReactNod
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 8, marginBottom: 2 }}>
       <Text variant="title3" style={{ fontSize: 18 }}>{title}</Text>
       {right}
+    </View>
+  );
+}
+
+/** Etiqueta de los perfiles de ejemplo del mercado. */
+export function DemoTag() {
+  const { colors } = useTheme();
+  return (
+    <View style={{ paddingHorizontal: 7, height: 20, borderRadius: 10, backgroundColor: colors.surface2, justifyContent: 'center' }} accessibilityLabel="Perfil de ejemplo">
+      <Text variant="footnote" tertiary style={{ fontSize: 10.5, fontFamily: fonts.semibold }}>Ejemplo</Text>
+    </View>
+  );
+}
+
+/** Aviso de los perfiles y eventos de ejemplo. */
+export function DemoBanner({ text }: { text: string }) {
+  const { colors } = useTheme();
+  return (
+    <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.hairline, borderRadius: 18, padding: 12 }}>
+      <MaterialCommunityIcons name="information-outline" size={18} color={colors.textSecondary} />
+      <Text variant="footnote" secondary style={{ flex: 1, lineHeight: 18 }}>{text}</Text>
     </View>
   );
 }
