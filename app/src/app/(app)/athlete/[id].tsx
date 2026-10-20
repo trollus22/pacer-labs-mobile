@@ -7,7 +7,7 @@ import { PressableScale } from '@/components/PressableScale';
 import { Segmented } from '@/components/Segmented';
 import { TodayRings } from '@/components/TodayRings';
 import { WeekView } from '@/components/WeekView';
-import { GUTTER, accent, useTheme } from '@/theme';
+import { accent, useTheme } from '@/theme';
 import { todayISO } from '@/lib/dates';
 
 type View_ = 'plan' | 'form';
@@ -18,6 +18,7 @@ export default function AthleteDetail() {
   const { id, name, tab } = useLocalSearchParams<{ id: string; name?: string; tab?: string }>();
   const [view, setView] = useState<View_>(tab === 'form' ? 'form' : 'plan');
   const add = (date: string) => router.push({ pathname: '/workout/edit', params: { athleteId: id, date } });
+  const seg = <Segmented value={view} onChange={setView} options={[{ key: 'plan', label: 'Plan' }, { key: 'form', label: 'Forma' }]} />;
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <Stack.Screen
@@ -30,10 +31,8 @@ export default function AthleteDetail() {
           ) : undefined,
         }}
       />
-      <View style={{ paddingHorizontal: GUTTER, paddingTop: 8, paddingBottom: 4 }}>
-        <Segmented value={view} onChange={setView} options={[{ key: 'plan', label: 'Plan' }, { key: 'form', label: 'Forma' }]} />
-      </View>
-      {view === 'plan' ? <WeekView athleteId={id} nav onAdd={add} top={<TodayRings path={`/athletes/${id}/dashboard`} />} /> : <AthleteDashboard path={`/athletes/${id}/dashboard`} header={<TodayRings path={`/athletes/${id}/dashboard`} />} />}
+      {/* El selector va DENTRO del contenido que se desplaza, no en una franja fija encima: así el fondo de metal es uno solo y no se corta con un borde. */}
+      {view === 'plan' ? <WeekView athleteId={id} nav onAdd={add} top={<>{seg}<TodayRings path={`/athletes/${id}/dashboard`} /></>} /> : <AthleteDashboard path={`/athletes/${id}/dashboard`} header={<>{seg}<TodayRings path={`/athletes/${id}/dashboard`} /></>} />}
     </View>
   );
 }
