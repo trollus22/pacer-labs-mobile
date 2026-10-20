@@ -10,6 +10,7 @@ import { Text } from './Text';
 import { accent, useTheme } from '@/theme';
 import { haptic } from '@/lib/haptics';
 import { CSS_EASE_OUT } from '@/lib/motion';
+import { PaceyAvatar } from './pacey/PaceyAvatar';
 
 export type TabItem = { name: string; label: string; icon: React.ComponentProps<typeof MaterialCommunityIcons>['name'] };
 
@@ -33,7 +34,7 @@ export function GlassTabBar({ items, compact }: { items: TabItem[]; compact?: bo
         const press = () => { if (!on) { haptic.select(); router.navigate(`/(app)/(tabs)/${it.name}` as never); } };
         return (
           <PressableScale key={it.name} scale={0.94} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: on }} accessibilityLabel={it.label}>
-            <Animated.View style={[{ height: 56, width: compact ? 68 : 96, borderRadius: 28, borderCurve: 'continuous', alignItems: 'center', justifyContent: 'center', gap: 2, paddingHorizontal: 4 },
+            <Animated.View style={[{ height: 56, width: compact ? 66 : 96, borderRadius: 28, borderCurve: 'continuous', alignItems: 'center', justifyContent: 'center', gap: 2, paddingHorizontal: 4 },
               { backgroundColor: on ? (scheme === 'dark' ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.07)') : 'transparent', transitionProperty: 'backgroundColor', transitionDuration: '180ms', transitionTimingFunction: CSS_EASE_OUT }]}>
               <MaterialCommunityIcons name={it.icon} size={25} color={on ? accent.coral : colors.textSecondary} />
               <Text variant="caption" style={{ fontSize: 10.5, letterSpacing: 0.2, textTransform: 'none' }} color={on ? accent.coral : colors.textSecondary} numberOfLines={1}>{it.label}</Text>
@@ -57,12 +58,11 @@ export function GlassTabBar({ items, compact }: { items: TabItem[]; compact?: bo
         {!glass && Platform.OS === 'ios' ? <BlurView intensity={60} tint={scheme === 'dark' ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'} style={fill} /> : null}
         {bar}
       </View>
-      {/* Pacer, el asistente: círculo aparte de las pestañas, como en la barra nativa del iPhone (iOS 26). */}
-      <PressableScale scale={0.92} onPress={() => { haptic.select(); router.push('/pacer'); }} accessibilityLabel="Pacer, asistente" accessibilityHint="Abre el chat">
-        <View style={[{ width: 68, height: 68, borderRadius: 34, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }, glass ? { backgroundColor: 'rgba(255,255,255,0.3)' } : { backgroundColor: solid, borderWidth: 1, borderColor: web ? 'rgba(255,255,255,0.75)' : colors.hairline }, webGlass]}>
-          {glass ? <GlassView glassEffectStyle="regular" isInteractive colorScheme={scheme} style={[fill, { borderRadius: 34 }]} /> : null}
-          {!glass && Platform.OS === 'ios' ? <BlurView intensity={60} tint={scheme === 'dark' ? 'systemChromeMaterialDark' : 'systemChromeMaterialLight'} style={fill} /> : null}
-          <MaterialCommunityIcons name="creation" size={27} color={colors.text} />
+      {/* Pacey, el asistente: círculo oscuro aparte de las pestañas, con Pacey animado (reposo, mirando a los lados, parpadeando). */}
+      <PressableScale scale={0.92} onPress={() => { haptic.select(); router.push('/pacer'); }} accessibilityLabel="Pacey, tu asistente" accessibilityHint="Abre el chat">
+        <View style={[{ width: 66, height: 66, borderRadius: 33, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', backgroundColor: '#111316', borderWidth: 1, borderColor: 'rgba(255,255,255,0.14)',
+          shadowColor: '#000', shadowOpacity: 0.22, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } }, web ? ({ boxShadow: '0 10px 26px rgba(17,17,17,0.28), inset 0 1px 0 rgba(255,255,255,0.18)' } as never) : null]}>
+          <PaceyAvatar size={60} variety onDark />
         </View>
       </PressableScale>
     </View>

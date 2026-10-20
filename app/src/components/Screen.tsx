@@ -26,8 +26,8 @@ export function Screen({ children, refreshing, onRefresh, webTitle, contentStyle
   const [measured, setMeasured] = useState(0);
   const win = useWindowDimensions().width;
   const wide = (measured || win) >= 700;
-  // iPad (y la vista web ancha) llevan la barra flotante de cristal encima del contenido: hay que dejarle sitio.
-  const floating = (Platform.OS === 'ios' && Platform.isPad) || Platform.OS === 'web';
+  // La barra flotante de cristal va encima del contenido en todos los dispositivos: hay que dejarle sitio.
+  const floating = true;
   return (
     <View onLayout={(e) => setMeasured(Math.round(e.nativeEvent.layout.width))} style={{ flex: 1, backgroundColor: transparent ? 'transparent' : colors.bg }}>
       {transparent ? null : <AppBackground />}

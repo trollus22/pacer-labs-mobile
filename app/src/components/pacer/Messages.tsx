@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Animated, { FadeIn, useAnimatedStyle, useReducedMotion, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { FadeIn } from 'react-native-reanimated';
 import { PressableScale } from '../PressableScale';
 import { Text } from '../Text';
 import { StatusBadge } from '../StatusBadge';
+import { PaceyBadge } from '../pacey/PaceyAvatar';
 import { accent, fonts, metal, sports, tone, createStyles, useTheme } from '@/theme';
 import { alpha } from '@/lib/color';
 import { haptic } from '@/lib/haptics';
@@ -23,7 +24,7 @@ export const TOPIC: Record<PacerTopic, { color: string; icon: Icon }> = {
   general: { color: metal.dk, icon: 'creation' },
 };
 
-/** Texto con **negritas** (lo único que usa Pacer). */
+/** Texto con **negritas** (lo único que usa Pacey). */
 export function RichText({ text, style }: { text: string; style?: object }) {
   const parts = text.split(/\*\*(.+?)\*\*/g);
   return (
@@ -42,7 +43,7 @@ export function UserBubble({ m }: { m: PacerMessage }) {
   );
 }
 
-/** Mensaje de Pacer: sin burbuja y a todo el ancho; dice qué ha mirado, escribe el texto y añade tarjetas con acciones. */
+/** Mensaje de Pacey: sin burbuja y a todo el ancho; dice qué ha mirado, escribe el texto y añade tarjetas con acciones. */
 export function PacerReply({ m, last, onFollowUp }: { m: PacerMessage; last: boolean; onFollowUp: (q: string) => void }) {
   const { colors } = useTheme();
   const styles = useStyles();
@@ -50,10 +51,10 @@ export function PacerReply({ m, last, onFollowUp }: { m: PacerMessage; last: boo
   return (
     <View style={styles.reply} accessibilityLiveRegion={last ? 'polite' : 'none'}>
       <View style={styles.who}>
-        <MaterialCommunityIcons name="creation" size={14} color={colors.text} />
-        <Text variant="caption" tertiary style={{ fontSize: 11, letterSpacing: 0.8 }}>Pacer</Text>
+        {/* Solo el último mensaje anima a Pacey: piensa mientras mira tus datos, trabaja mientras escribe y luego descansa. */}
+        <PaceyBadge size={m.state === 'thinking' ? 44 : 28} mood={!last ? 'neutral' : m.state === 'thinking' ? 'thinking' : m.state === 'writing' ? 'working' : 'idle'} still={!last} />
+        <Text variant="caption" tertiary style={{ fontSize: 11, letterSpacing: 0.8 }}>{m.state === 'thinking' ? 'Pacey está mirando tus datos…' : 'Pacey'}</Text>
       </View>
-      {m.state === 'thinking' ? <Thinking /> : null}
       {m.steps?.map((s) => (
         <View key={s} style={styles.step}><View style={styles.dot} /><Text variant="footnote" secondary>{s}</Text></View>
       ))}
@@ -72,7 +73,7 @@ export function PacerReply({ m, last, onFollowUp }: { m: PacerMessage; last: boo
       {last && m.state === 'done' && m.followUps?.length ? (
         <Animated.View entering={FadeIn.duration(220).delay(80)} style={styles.chips}>
           {m.followUps.map((q) => (
-            <PressableScale key={q} scale={0.95} onPress={() => onFollowUp(q)} style={styles.chip} accessibilityHint="Pregunta a Pacer">
+            <PressableScale key={q} scale={0.95} onPress={() => onFollowUp(q)} style={styles.chip} accessibilityHint="Pregunta a Pacey">
               <Text variant="footnote" style={{ fontSize: 13.5 }}>{q}</Text>
             </PressableScale>
           ))}
@@ -80,28 +81,6 @@ export function PacerReply({ m, last, onFollowUp }: { m: PacerMessage; last: boo
       ) : null}
     </View>
   );
-}
-
-/** Tres puntos que laten mientras Pacer «piensa». */
-function Thinking() {
-  const styles = useStyles();
-  const reduced = useReducedMotion();
-  return (
-    <View style={styles.thinking} accessibilityLabel="Pacer está pensando">
-      {[0, 1, 2].map((i) => <Pulse key={i} i={i} still={reduced} />)}
-      <Text variant="footnote" tertiary style={{ marginLeft: 6 }}>Mirando tus datos…</Text>
-    </View>
-  );
-}
-function Pulse({ i, still }: { i: number; still: boolean }) {
-  const { colors } = useTheme();
-  const o = useSharedValue(0.35);
-  useEffect(() => {
-    if (still) return;
-    o.value = withDelay(i * 150, withRepeat(withSequence(withTiming(1, { duration: 360 }), withTiming(0.35, { duration: 360 })), -1));
-  }, [i, still, o]);
-  const st = useAnimatedStyle(() => ({ opacity: o.value }));
-  return <Animated.View style={[{ width: 7, height: 7, borderRadius: 4, backgroundColor: colors.text }, st]} />;
 }
 
 function Block({ b }: { b: PacerBlock }) {

@@ -7,7 +7,7 @@ import { createStyles, useTheme } from '@/theme';
 import { haptic } from '@/lib/haptics';
 import type { PacerTopic } from '@/lib/pacer';
 
-/** Abre Pacer en hoja con una pregunta y su contexto; la pregunta se envía sola. */
+/** Abre Pacey en hoja con una pregunta y su contexto; la pregunta se envía sola. */
 export function openPacer(q: string, topic: PacerTopic, w?: object) {
   haptic.select();
   router.push({ pathname: '/pacer-sheet', params: { q, topic, ...(w ? { w: JSON.stringify(w) } : {}) } });
@@ -19,7 +19,7 @@ export function AskPacer({ q, topic, w, onColor }: { q: string; topic: PacerTopi
   const styles = useStyles();
   const fg = onColor ? '#FFFFFF' : colors.text;
   return (
-    <PressableScale scale={0.97} onPress={() => openPacer(q, topic, w)} accessibilityLabel={`Preguntar a Pacer: ${q}`}>
+    <PressableScale scale={0.97} onPress={() => openPacer(q, topic, w)} accessibilityLabel={`Preguntar a Pacey: ${q}`}>
       <View style={[styles.row, { backgroundColor: onColor ? 'rgba(255,255,255,0.16)' : colors.surface2 }]}>
         <MaterialCommunityIcons name="creation" size={16} color={fg} />
         <Text variant="subhead" color={fg} style={{ flex: 1, fontSize: 14 }} numberOfLines={1}>{q}</Text>

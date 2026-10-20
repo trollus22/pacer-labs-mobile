@@ -8,6 +8,7 @@ import { AppBackground } from '../AppBackground';
 import { PressableScale } from '../PressableScale';
 import { Text } from '../Text';
 import { Glass } from './Glass';
+import { PaceyAvatar, PaceyBadge } from '../pacey/PaceyAvatar';
 import { ConversationsMenu } from './ConversationsMenu';
 import { PacerReply, TOPIC, UserBubble } from './Messages';
 import { createStyles, fonts, useTheme, type Sport } from '@/theme';
@@ -23,7 +24,7 @@ const MAX_W = 760;
 
 export type PacerParams = { c?: string; topic?: string; q?: string; w?: string };
 
-/** Datos reales con los que Pacer arma sus respuestas simuladas (los mismos que ya ha pedido la pantalla Hoy o el Panel). */
+/** Datos reales con los que Pacey arma sus respuestas simuladas (los mismos que ya ha pedido la pantalla Hoy o el Panel). */
 function useFacts(w?: string): PacerFacts {
   const { user } = useAuth();
   const coach = user?.role === 'coach';
@@ -39,7 +40,7 @@ function useFacts(w?: string): PacerFacts {
 const greeting = () => { const h = new Date().getHours(); return h < 6 ? 'Buenas noches' : h < 14 ? 'Buenos días' : h < 21 ? 'Buenas tardes' : 'Buenas noches'; };
 
 /**
- * El chat de Pacer. `full`: pantalla completa (desde el botón de la barra) con el menú de conversaciones arriba a la izquierda.
+ * El chat de Pacey. `full`: pantalla completa (desde el botón de la barra) con el menú de conversaciones arriba a la izquierda.
  * `sheet`: hoja deslizable que se abre desde una tarjeta, con el contexto a la vista y «Abrir en grande».
  */
 export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: PacerParams }) {
@@ -96,10 +97,10 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
   const header = sheet ? (
     <View style={[styles.sheetHead, { paddingTop: 4 }]}>
       <View style={styles.ctx}>
-        <MaterialCommunityIcons name="creation" size={13} color={colors.text} />
+        <PaceyBadge size={20} mood="neutral" still />
         <Text variant="footnote" style={{ fontSize: 12.5 }} numberOfLines={1}>Contexto: {TOPIC_LABEL[topic]}</Text>
       </View>
-      <PressableScale scale={0.95} onPress={expand} accessibilityLabel="Abrir Pacer en pantalla completa">
+      <PressableScale scale={0.95} onPress={expand} accessibilityLabel="Abrir Pacey en pantalla completa">
         <Text variant="subhead" secondary>Abrir en grande</Text>
       </PressableScale>
     </View>
@@ -116,8 +117,17 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
         </PressableScale>
       </View>
       <View style={styles.title}>
-        <Text variant="headline" numberOfLines={1} style={{ fontSize: 15.5, letterSpacing: -0.2 }}>{conv?.title ?? 'Pacer'}</Text>
-        <Text variant="footnote" tertiary style={{ fontSize: 12 }}>{conv ? 'Pacer' : 'Lee tus datos de hoy'}</Text>
+        {conv ? (
+          <>
+            <Text variant="headline" numberOfLines={1} style={{ fontSize: 15.5, letterSpacing: -0.2 }}>{conv.title}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}><PaceyBadge size={16} mood="neutral" still /><Text variant="footnote" tertiary style={{ fontSize: 12 }}>Pacey</Text></View>
+          </>
+        ) : (
+          <>
+            <Text variant="headline" numberOfLines={1} style={{ fontSize: 15.5, letterSpacing: -0.2 }}>Pacey</Text>
+            <Text variant="footnote" tertiary style={{ fontSize: 12 }}>Tu asistente</Text>
+          </>
+        )}
       </View>
       <View style={[styles.headSide, { justifyContent: 'flex-end' }]}>
         <PressableScale scale={0.9} onPress={newChat} accessibilityLabel="Nueva conversación">
@@ -147,12 +157,12 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
             : sheet && params.q ? null : (
               <Animated.View entering={FadeIn.duration(260)} style={{ gap: 26, paddingTop: sheet ? 12 : 36 }}>
                 <View style={{ gap: 18 }}>
-                  <View style={styles.mark}><MaterialCommunityIcons name="creation" size={26} color="#fff" /></View>
-                  <Text style={styles.hello}>{greeting()}{first ? `, ${first}` : ''}.{'\n'}<Text style={[styles.hello, { color: colors.textTertiary }]}>¿En qué te ayudo?</Text></Text>
+                  <View style={styles.mark}><PaceyAvatar size={sheet ? 92 : 132} mood="listening" variety={!text.trim()} seed={7} onDark /></View>
+                  <Text style={styles.hello}>{greeting()}{first ? `, ${first}` : ''}.{'\n'}<Text style={[styles.hello, { color: colors.textTertiary }]}>Soy Pacey, ¿en qué te ayudo?</Text></Text>
                 </View>
                 <View style={styles.grid}>
                   {sugg.map((s) => (
-                    <PressableScale key={s.q} scale={0.97} onPress={() => send(s.q)} style={styles.sugg} accessibilityLabel={s.q} accessibilityHint="Pregunta a Pacer">
+                    <PressableScale key={s.q} scale={0.97} onPress={() => send(s.q)} style={styles.sugg} accessibilityLabel={s.q} accessibilityHint="Pregunta a Pacey">
                       <View style={styles.suggHead}>
                         <MaterialCommunityIcons name={TOPIC[s.topic].icon} size={12} color={TOPIC[s.topic].color} />
                         <Text variant="caption" color={TOPIC[s.topic].color} style={{ fontSize: 10.5, letterSpacing: 0.8 }}>{s.label}</Text>
@@ -161,14 +171,14 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
                     </PressableScale>
                   ))}
                 </View>
-                <Text variant="footnote" tertiary center style={{ fontSize: 12 }}>Pacer orienta; no sustituye a tu entrenador ni a un médico.{'\n'}Versión de demostración: las respuestas son simuladas.</Text>
+                <Text variant="footnote" tertiary center style={{ fontSize: 12 }}>Pacey orienta; no sustituye a tu entrenador ni a un médico.{'\n'}Versión de demostración: las respuestas son simuladas.</Text>
               </Animated.View>
             )}
         </ScrollView>
 
         <View style={[styles.composerWrap, { paddingBottom: sheet ? 16 : Math.max(insets.bottom, 12) }]} pointerEvents="box-none">
           <Composer sheet={sheet} value={text} onChange={setText} busy={busy} inputRef={input}
-            placeholder={facts.role === 'coach' && sheet ? 'Pregunta sobre el equipo…' : 'Pregunta a Pacer…'}
+            placeholder={facts.role === 'coach' && sheet ? 'Pregunta sobre el equipo…' : 'Pregunta a Pacey…'}
             onSend={() => send(text)} onStop={() => { if (cid) { haptic.light(); stopPacer(cid); } }} />
         </View>
       </KeyboardAvoidingView>
@@ -203,7 +213,7 @@ function Composer({ sheet, value, onChange, busy, onSend, onStop, placeholder, i
         submitBehavior="submit"
         onSubmitEditing={onSend}
         returnKeyType="send"
-        accessibilityLabel="Mensaje para Pacer"
+        accessibilityLabel="Mensaje para Pacey"
         maxFontSizeMultiplier={1.35}
       />
       {busy ? (
@@ -233,7 +243,7 @@ const useStyles = createStyles((c) => ({
   sheetHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10, paddingHorizontal: 18, paddingBottom: 6 },
   ctx: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: c.surface2, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 6, flexShrink: 1 },
   list: { paddingHorizontal: 18, paddingTop: 6, width: '100%', maxWidth: MAX_W, alignSelf: 'center' },
-  mark: { width: 52, height: 52, borderRadius: 26, backgroundColor: c.ink, alignItems: 'center', justifyContent: 'center' },
+  mark: { alignSelf: 'flex-start', padding: 10, borderRadius: 40, borderCurve: 'continuous', backgroundColor: '#111316', alignItems: 'center', justifyContent: 'center' },
   hello: { fontFamily: fonts.light, fontSize: 34, lineHeight: 39, letterSpacing: -1.2, color: c.text },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   sugg: { flexBasis: '48%', flexGrow: 1, backgroundColor: c.surface, borderWidth: 1, borderColor: c.hairline, borderRadius: 20, borderCurve: 'continuous', padding: 14, gap: 6, minHeight: 92 },

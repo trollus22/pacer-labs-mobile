@@ -5,7 +5,7 @@ import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
 import { useTheme } from '@/theme';
 
 /**
- * Superficie de cristal de Pacer (botones de la cabecera, barra de escribir, menú de conversaciones): Liquid Glass real en iOS 26,
+ * Superficie de cristal de Pacey (botones de la cabecera, barra de escribir, menú de conversaciones): Liquid Glass real en iOS 26,
  * material desenfocado en iOS anterior y una aproximación con blur en la web. Es la misma receta que la barra de pestañas.
  */
 export function Glass({ children, radius, style, interactive }: { children?: ReactNode; radius: number; style?: StyleProp<ViewStyle>; interactive?: boolean }) {

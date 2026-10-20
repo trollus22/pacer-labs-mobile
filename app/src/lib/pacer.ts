@@ -3,7 +3,7 @@ import { addDays, todayISO, fromISO } from './dates';
 import type { Dashboard, ReadinessStatus, TeamDashboard } from './types';
 import type { Sport } from '@/theme';
 
-// Pacer, el chat de IA. De momento NO hay IA: las respuestas se simulan aquí con los datos reales de la app (recuperación,
+// Pacey, el chat de IA. De momento NO hay IA: las respuestas se simulan aquí con los datos reales de la app (recuperación,
 // sueño, carga) para poder diseñar y probar la experiencia. Las conversaciones viven en memoria y se pierden al cerrar la app.
 
 /** De qué parte de la app viene la pregunta. Da color y título a la conversación y orienta la respuesta. */
@@ -17,9 +17,9 @@ export type PacerMessage = {
   id: string;
   role: 'user' | 'pacer';
   at: string;
-  /** Texto del usuario, o el texto que Pacer va «escribiendo». */
+  /** Texto del usuario, o el texto que Pacey va «escribiendo». */
   text: string;
-  /** Lo que Pacer ha mirado para responder («Ha mirado tu check-in…»). */
+  /** Lo que Pacey ha mirado para responder («Ha mirado tu check-in…»). */
   steps?: string[];
   blocks?: PacerBlock[];
   followUps?: string[];
@@ -120,7 +120,7 @@ function reply(q: string, topic: PacerTopic, f: PacerFacts): Omit<PacerMessage, 
   const cur = f.me?.current;
   const sleep = lastSleep(f.me);
   const ratio = cur?.stats.ratio ?? null;
-  // Los motivos vienen en tercera persona («Durmió 5,3 h»); Pacer te habla a ti.
+  // Los motivos vienen en tercera persona («Durmió 5,3 h»); Pacey te habla a ti.
   const reasons = cur?.drivers.filter((d) => d.tone !== 'info').map((d) => toYou(d.text.replace(/\.$/, ''))) ?? [];
 
   if (f.role === 'coach' || topic === 'team') {
@@ -181,7 +181,7 @@ function reply(q: string, topic: PacerTopic, f: PacerFacts): Omit<PacerMessage, 
     return { steps: ['Ha mirado tus últimas 4 semanas'], text: 'Tu forma va **en la buena dirección**: la carga crónica sube poco a poco y tus sensaciones en las sesiones de calidad han mejorado. Mantén 2 sesiones de calidad por semana como máximo.', followUps: ['¿Cuándo hago un test?', '¿Qué ritmo debería tener en umbral?'] };
   }
 
-  return { steps: ['Ha mirado tus datos de hoy'], text: `Buena pregunta. Cuando Pacer esté conectado a la IA te responderé a «${q.replace(/[¿?]/g, '')}» con tus datos. Por ahora es una **demostración** del diseño.`, followUps: ['¿Por qué estoy así hoy?', 'Resume mi semana'] };
+  return { steps: ['Ha mirado tus datos de hoy'], text: `Buena pregunta. Cuando Pacey esté conectado a la IA te responderé a «${q.replace(/[¿?]/g, '')}» con tus datos. Por ahora es una **demostración** del diseño.`, followUps: ['¿Por qué estoy así hoy?', 'Resume mi semana'] };
 }
 
 // --- Enviar una pregunta -----------------------------------------------------------------------------------------------
