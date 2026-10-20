@@ -52,7 +52,7 @@ export function PacerReply({ m, last, onFollowUp }: { m: PacerMessage; last: boo
     <View style={styles.reply} accessibilityLiveRegion={last ? 'polite' : 'none'}>
       <View style={styles.who}>
         {/* Solo el último mensaje anima a Pacey: piensa mientras mira tus datos, trabaja mientras escribe y luego descansa. */}
-        <PaceyBadge size={m.state === 'thinking' ? 44 : 28} mood={!last ? 'neutral' : m.state === 'thinking' ? 'thinking' : m.state === 'writing' ? 'working' : 'idle'} still={!last} />
+        <PaceyBadge size={m.state === 'thinking' ? 46 : 30} mood={!last ? 'neutral' : m.state === 'thinking' ? 'thinking' : m.state === 'writing' ? 'working' : 'idle'} still={!last} />
         <Text variant="caption" tertiary style={{ fontSize: 11, letterSpacing: 0.8 }}>{m.state === 'thinking' ? 'Pacey está mirando tus datos…' : 'Pacey'}</Text>
       </View>
       {m.steps?.map((s) => (

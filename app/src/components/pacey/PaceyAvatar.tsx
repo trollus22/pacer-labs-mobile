@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 import Svg, { Defs, Ellipse, G, LinearGradient, Mask, Rect, Stop } from 'react-native-svg';
 import { PACEY_BOX, PACEY_VARIETY, paceyPose, paceyVarietyPose, type PaceyMood } from '@/lib/pacey';
@@ -88,11 +88,13 @@ function mixToward(a: string, b: string, t: number) {
   return `#${x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, '0')).join('')}`;
 }
 
-/** Pacey en su círculo oscuro (botón de la barra, mensajes, cabecera): mismo aspecto en cualquier fondo. */
+/** Pacey pequeño (mensajes, cabecera): solo la silueta, con una sombra suave para que se lea sobre fondo claro. */
 export function PaceyBadge({ size = 32, mood = 'idle', still, variety }: { size?: number; mood?: PaceyMood | 'neutral'; still?: boolean; variety?: boolean }) {
   return (
-    <View style={{ width: size, height: size, borderRadius: size / 2, backgroundColor: '#111316', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-      <PaceyAvatar size={size * 0.92} mood={mood} still={still} variety={variety} onDark />
+    <View style={[{ width: size, height: size, alignItems: 'center', justifyContent: 'center' },
+      Platform.OS === 'web' ? ({ filter: `drop-shadow(0 ${Math.max(1, size * 0.06)}px ${Math.max(1.5, size * 0.08)}px rgba(17,17,17,0.3))` } as never)
+        : { shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: Math.max(1.5, size * 0.08), shadowOffset: { width: 0, height: Math.max(1, size * 0.06) } }]}>
+      <PaceyAvatar size={size * 1.12} mood={mood} still={still} variety={variety} />
     </View>
   );
 }

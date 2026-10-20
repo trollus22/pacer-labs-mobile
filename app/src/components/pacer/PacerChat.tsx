@@ -157,7 +157,7 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
             : sheet && params.q ? null : (
               <Animated.View entering={FadeIn.duration(260)} style={{ gap: 26, paddingTop: sheet ? 12 : 36 }}>
                 <View style={{ gap: 18 }}>
-                  <View style={styles.mark}><PaceyAvatar size={sheet ? 92 : 132} mood="listening" variety={!text.trim()} seed={7} onDark /></View>
+                  <View style={[{ alignSelf: 'flex-start' }, Platform.OS === 'web' ? ({ filter: 'drop-shadow(0 10px 12px rgba(17,17,17,0.22))' } as never) : { shadowColor: '#000', shadowOpacity: 0.22, shadowRadius: 12, shadowOffset: { width: 0, height: 8 } }]}><PaceyAvatar size={sheet ? 110 : 160} mood="listening" variety={!text.trim()} seed={7} /></View>
                   <Text style={styles.hello}>{greeting()}{first ? `, ${first}` : ''}.{'\n'}<Text style={[styles.hello, { color: colors.textTertiary }]}>Soy Pacey, ¿en qué te ayudo?</Text></Text>
                 </View>
                 <View style={styles.grid}>
@@ -243,7 +243,6 @@ const useStyles = createStyles((c) => ({
   sheetHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10, paddingHorizontal: 18, paddingBottom: 6 },
   ctx: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: c.surface2, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 6, flexShrink: 1 },
   list: { paddingHorizontal: 18, paddingTop: 6, width: '100%', maxWidth: MAX_W, alignSelf: 'center' },
-  mark: { alignSelf: 'flex-start', padding: 10, borderRadius: 40, borderCurve: 'continuous', backgroundColor: '#111316', alignItems: 'center', justifyContent: 'center' },
   hello: { fontFamily: fonts.light, fontSize: 34, lineHeight: 39, letterSpacing: -1.2, color: c.text },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   sugg: { flexBasis: '48%', flexGrow: 1, backgroundColor: c.surface, borderWidth: 1, borderColor: c.hairline, borderRadius: 20, borderCurve: 'continuous', padding: 14, gap: 6, minHeight: 92 },

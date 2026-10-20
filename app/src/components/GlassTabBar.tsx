@@ -60,9 +60,9 @@ export function GlassTabBar({ items, compact }: { items: TabItem[]; compact?: bo
       </View>
       {/* Pacey, el asistente: círculo oscuro aparte de las pestañas, con Pacey animado (reposo, mirando a los lados, parpadeando). */}
       <PressableScale scale={0.92} onPress={() => { haptic.select(); router.push('/pacer'); }} accessibilityLabel="Pacey, tu asistente" accessibilityHint="Abre el chat">
-        <View style={[{ width: 66, height: 66, borderRadius: 33, overflow: 'hidden', alignItems: 'center', justifyContent: 'center', backgroundColor: '#111316', borderWidth: 1, borderColor: 'rgba(255,255,255,0.14)',
-          shadowColor: '#000', shadowOpacity: 0.22, shadowRadius: 14, shadowOffset: { width: 0, height: 6 } }, web ? ({ boxShadow: '0 10px 26px rgba(17,17,17,0.28), inset 0 1px 0 rgba(255,255,255,0.18)' } as never) : null]}>
-          <PaceyAvatar size={60} variety onDark />
+        <View style={[{ width: 74, height: 74, alignItems: 'center', justifyContent: 'center' },
+          web ? ({ filter: 'drop-shadow(0 6px 8px rgba(17,17,17,0.28))' } as never) : { shadowColor: '#000', shadowOpacity: 0.28, shadowRadius: 8, shadowOffset: { width: 0, height: 5 } }]}>
+          <PaceyAvatar size={74} variety />
         </View>
       </PressableScale>
     </View>
