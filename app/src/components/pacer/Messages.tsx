@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -34,6 +34,21 @@ export function RichText({ text, style }: { text: string; style?: object }) {
   );
 }
 
+/** Texto que se va escribiendo palabra a palabra (solo si la respuesta llega mientras miras la pantalla); cierra las **negritas** a medias. */
+function useTyped(full: string, animate: boolean) {
+  const words = full.split(/(\s+)/);
+  const [n, setN] = useState(animate ? 0 : words.length);
+  useEffect(() => {
+    if (!animate) return;
+    const step = Math.max(1, Math.ceil(words.length / 55));
+    const id = setInterval(() => setN((k) => { if (k + step >= words.length) { clearInterval(id); return words.length; } return k + step; }), 28);
+    return () => clearInterval(id);
+  }, [full, animate]); // eslint-disable-line react-hooks/exhaustive-deps
+  let shown = words.slice(0, animate ? n : words.length).join('');
+  if ((shown.match(/\*\*/g) ?? []).length % 2) shown += '**';
+  return { shown, finished: !animate || n >= words.length };
+}
+
 export function UserBubble({ m }: { m: PacerMessage }) {
   const styles = useStyles();
   return (
@@ -48,6 +63,10 @@ export function PacerReply({ m, last, onFollowUp }: { m: PacerMessage; last: boo
   const { colors } = useTheme();
   const styles = useStyles();
   const [vote, setVote] = useState<'up' | 'down' | null>(null);
+  // Solo se escribe poco a poco la respuesta que llega estando en pantalla: la que ya estaba hecha al abrir la conversación sale entera.
+  const [waited] = useState(m.state !== 'done');
+  const { shown, finished } = useTyped(m.text, waited && last && !m.error);
+  const ready = m.state === 'done' && finished;
   return (
     <View style={styles.reply} accessibilityLiveRegion={last ? 'polite' : 'none'}>
       <View style={styles.who}>
@@ -60,19 +79,19 @@ export function PacerReply({ m, last, onFollowUp }: { m: PacerMessage; last: boo
       ))}
       {m.text ? (m.error
         ? <View style={styles.error}><MaterialCommunityIcons name="alert-circle-outline" size={18} color={tone.clay} /><Text variant="subhead" secondary style={{ flex: 1 }}>{m.text}</Text></View>
-        : <RichText text={m.text} style={{ marginTop: 6 }} />) : null}
-      {m.blocks?.map((b, i) => <Animated.View key={i} entering={FadeIn.duration(220)}><Block b={b} /></Animated.View>)}
-      {m.state === 'done' && !m.error ? (
-        <View style={styles.feedback}>
+        : <RichText text={shown} style={{ marginTop: 6 }} />) : null}
+      {ready ? m.blocks?.map((b, i) => <Animated.View key={i} entering={FadeIn.duration(220)}><Block b={b} /></Animated.View>) : null}
+      {ready && !m.error ? (
+        <Animated.View entering={FadeIn.duration(220)} style={styles.feedback}>
           <PressableScale scale={0.88} onPress={() => { haptic.select(); setVote(vote === 'up' ? null : 'up'); }} accessibilityLabel="Respuesta útil" accessibilityState={{ selected: vote === 'up' }}>
             <MaterialCommunityIcons name={vote === 'up' ? 'thumb-up' : 'thumb-up-outline'} size={18} color={vote === 'up' ? colors.text : colors.textTertiary} />
           </PressableScale>
           <PressableScale scale={0.88} onPress={() => { haptic.select(); setVote(vote === 'down' ? null : 'down'); }} accessibilityLabel="Respuesta poco útil" accessibilityState={{ selected: vote === 'down' }}>
             <MaterialCommunityIcons name={vote === 'down' ? 'thumb-down' : 'thumb-down-outline'} size={18} color={vote === 'down' ? colors.text : colors.textTertiary} />
           </PressableScale>
-        </View>
+        </Animated.View>
       ) : null}
-      {last && m.state === 'done' && m.followUps?.length ? (
+      {last && ready && m.followUps?.length ? (
         <Animated.View entering={FadeIn.duration(220).delay(80)} style={styles.chips}>
           {m.followUps.map((q) => (
             <PressableScale key={q} scale={0.95} onPress={() => onFollowUp(q)} style={styles.chip} accessibilityHint="Pregunta a Pacey">

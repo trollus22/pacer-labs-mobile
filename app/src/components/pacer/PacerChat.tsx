@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import Animated, { FadeIn, useReducedMotion } from 'react-native-reanimated';
+import Animated, { FadeIn, ZoomIn, ZoomOut, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppBackground } from '../AppBackground';
 import { PressableScale } from '../PressableScale';
@@ -86,11 +86,33 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
   const topic = (params.topic as PacerTopic) || 'general';
   const sheet = mode === 'sheet';
 
+  // Como en los chats de IA: al enviar, tu mensaje sube arriba del todo y la respuesta se va escribiendo debajo (sin saltar al final);
+  // al abrir el teclado, la conversación sube con el compositor para que veas lo que escribes.
+  const [viewH, setViewH] = useState(0);
+  const userY = useRef(0);
+  const [padY, setPadY] = useState(0);
+  const count = conv?.messages.length ?? 0;
+  const prevCount = useRef(count);
+  useEffect(() => { if (cid && count) setTimeout(() => scroll.current?.scrollToEnd({ animated: false }), 80); }, [cid]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const grew = count > prevCount.current;
+    prevCount.current = count;
+    if (!grew || !conv || conv.messages[count - 1]?.role !== 'pacer') return;
+    const t = setTimeout(() => scroll.current?.scrollTo({ y: Math.max(0, userY.current - 8), animated: !reduced }), 60);
+    return () => clearTimeout(t);
+  }, [count]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const ev = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const sub = Keyboard.addListener(ev, () => { if (conv) setTimeout(() => scroll.current?.scrollToEnd({ animated: !reduced }), 30); });
+    return () => sub.remove();
+  }, [conv, reduced]);
+
   const send = (q: string) => {
     const t = q.trim();
     if (!t || busy) return;
     haptic.light();
     setText('');
+    Keyboard.dismiss();
     setCid(askPacer({ conversationId: cid, question: t, topic }));
   };
 
@@ -171,14 +193,14 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
         <ScrollView
           ref={scroll}
           style={{ flex: 1 }}
-          contentContainerStyle={[styles.list, { paddingBottom: composerSpace + 12 }]}
+          onLayout={(e) => { setViewH(e.nativeEvent.layout.height); }}
+          contentContainerStyle={[styles.list, { paddingBottom: composerSpace + 12, minHeight: viewH ? padY + viewH - 8 : undefined }]}
           keyboardDismissMode="interactive"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          onContentSizeChange={() => { if (conv) scroll.current?.scrollToEnd({ animated: !reduced }); }}
         >
           {conv ? conv.messages.map((m, i) => (m.role === 'user'
-            ? <UserBubble key={m.id} m={m} />
+            ? <View key={m.id} onLayout={(e) => { if (i === conv.messages.length - 2) { userY.current = e.nativeEvent.layout.y; setPadY(e.nativeEvent.layout.y); } }}><UserBubble m={m} /></View>
             : <PacerReply key={m.id} m={m} last={i === conv.messages.length - 1} onFollowUp={send} />))
             : sheet && params.q ? null : (
               <Animated.View entering={FadeIn.duration(260)} style={{ gap: 26, paddingTop: sheet ? 12 : 36 }}>
@@ -242,17 +264,17 @@ function Composer({ sheet, value, onChange, busy, onSend, onStop, placeholder, i
         maxFontSizeMultiplier={1.35}
       />
       {busy ? (
-        <PressableScale scale={0.9} onPress={onStop} accessibilityLabel="Detener respuesta">
+        <Animated.View key="stop" entering={ZoomIn.duration(160)} exiting={ZoomOut.duration(120)}><PressableScale scale={0.9} onPress={onStop} accessibilityLabel="Detener respuesta">
           <View style={[styles.send, { backgroundColor: colors.ink }]}><View style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: '#fff' }} /></View>
-        </PressableScale>
+        </PressableScale></Animated.View>
       ) : has ? (
-        <PressableScale scale={0.9} onPress={onSend} accessibilityLabel="Enviar">
+        <Animated.View key="send" entering={ZoomIn.duration(160)} exiting={ZoomOut.duration(120)}><PressableScale scale={0.9} onPress={onSend} accessibilityLabel="Enviar">
           <View style={[styles.send, { backgroundColor: colors.ink }]}><MaterialCommunityIcons name="arrow-up" size={21} color="#fff" /></View>
-        </PressableScale>
+        </PressableScale></Animated.View>
       ) : (
-        <PressableScale scale={0.9} onPress={() => inputRef.current?.focus()} accessibilityLabel="Dictar" accessibilityHint="Abre el teclado; usa el micrófono del teclado para dictar">
+        <Animated.View key="mic" entering={ZoomIn.duration(160)} exiting={ZoomOut.duration(120)}><PressableScale scale={0.9} onPress={() => inputRef.current?.focus()} accessibilityLabel="Dictar" accessibilityHint="Abre el teclado; usa el micrófono del teclado para dictar">
           <View style={styles.send}><MaterialCommunityIcons name="microphone-outline" size={22} color={colors.textSecondary} /></View>
-        </PressableScale>
+        </PressableScale></Animated.View>
       )}
     </View>
   );
