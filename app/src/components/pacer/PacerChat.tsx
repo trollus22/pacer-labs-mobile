@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, TextInput, View } from 'react-native';
+import MaskedView from '@react-native-masked-view/masked-view';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Animated, { FadeIn, useReducedMotion } from 'react-native-reanimated';
@@ -16,7 +18,7 @@ import { useAuth } from '@/lib/auth';
 import { useQuery } from '@/lib/query';
 import { todayISO } from '@/lib/dates';
 import { haptic } from '@/lib/haptics';
-import { askPacer, isAnswering, seedPacer, stopPacer, suggestions, usePacerConversations, type PacerFacts, type PacerTopic } from '@/lib/pacer';
+import { askPacer, isAnswering, stopPacer, suggestions, usePacerConversations, type PacerFacts, type PacerTopic } from '@/lib/pacer';
 import type { Dashboard, TeamDashboard } from '@/lib/types';
 
 const TOPIC_LABEL: Record<PacerTopic, string> = { recovery: 'Recuperación de hoy', today: 'Entreno de hoy', week: 'Tu semana', form: 'Tu forma', team: 'Panel del equipo · hoy', general: 'General' };
@@ -24,7 +26,7 @@ const MAX_W = 760;
 
 export type PacerParams = { c?: string; topic?: string; q?: string; w?: string };
 
-/** Datos reales con los que Pacey arma sus respuestas simuladas (los mismos que ya ha pedido la pantalla Hoy o el Panel). */
+/** Datos reales con los que se eligen las sugerencias de la pantalla de inicio (los mismos que ya ha pedido la pantalla Hoy o el Panel). Las respuestas las arma el servidor. */
 function useFacts(w?: string): PacerFacts {
   const { user } = useAuth();
   const coach = user?.role === 'coach';
@@ -35,6 +37,29 @@ function useFacts(w?: string): PacerFacts {
     try { workout = w ? (JSON.parse(w) as { title: string; sport: Sport; zone: number; durationMin: number | null }) : undefined; } catch { workout = undefined; }
     return { role: coach ? 'coach' : 'athlete', name: user?.name ?? '', me, team, workout };
   }, [coach, user?.name, me, team, w]);
+}
+
+/**
+ * Desvanece lo que hay dentro en sus bordes superior e inferior. En iOS y Android se usa una vista enmascarada (el alfa de la máscara);
+ * en web, la máscara de CSS (la vista enmascarada de React Native no funciona en navegador).
+ */
+function Fade({ top, bottom, children }: { top: number; bottom: number; children: React.ReactNode }) {
+  if (Platform.OS === 'web') {
+    const g = `linear-gradient(to bottom, transparent 0, #000 ${top}px, #000 calc(100% - ${bottom}px), transparent 100%)`;
+    return <View style={[{ flex: 1 }, ({ maskImage: g, WebkitMaskImage: g } as never)]}>{children}</View>;
+  }
+  return <MaskedView style={{ flex: 1 }} maskElement={<FadeMask top={top} bottom={bottom} />}>{children}</MaskedView>;
+}
+
+/** Máscara del desvanecido: transparente arriba y abajo, opaca en medio. */
+function FadeMask({ top, bottom }: { top: number; bottom: number }) {
+  return (
+    <View style={{ flex: 1 }}>
+      <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']} style={{ height: top }} />
+      <View style={{ flex: 1, backgroundColor: '#000' }} />
+      <LinearGradient colors={['rgba(0,0,0,1)', 'rgba(0,0,0,0)']} style={{ height: bottom }} />
+    </View>
+  );
 }
 
 const greeting = () => { const h = new Date().getHours(); return h < 6 ? 'Buenas noches' : h < 14 ? 'Buenos días' : h < 21 ? 'Buenas tardes' : 'Buenas noches'; };
@@ -61,25 +86,22 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
   const topic = (params.topic as PacerTopic) || 'general';
   const sheet = mode === 'sheet';
 
-  useEffect(() => { if (user) seedPacer(user.id, user.role); }, [user]);
-
   const send = (q: string) => {
     const t = q.trim();
     if (!t || busy) return;
     haptic.light();
     setText('');
-    setCid(askPacer({ conversationId: cid, question: t, topic, facts, reducedMotion: reduced }));
+    setCid(askPacer({ conversationId: cid, question: t, topic }));
   };
 
-  // Pregunta que llega desde una tarjeta («¿Por qué estoy en precaución?»): se envía sola al abrir. Se espera a tener los datos.
+  // Pregunta que llega desde una tarjeta («¿Por qué estoy en precaución?»): se envía sola al abrir.
   const sent = useRef(false);
-  const ready = facts.role === 'coach' ? !!facts.team : !!facts.me;
   useEffect(() => {
     if (sent.current || !params.q || params.c) return;
-    const t = setTimeout(() => { if (!sent.current) { sent.current = true; send(params.q!); } }, ready ? 250 : 1500);
+    const t = setTimeout(() => { if (!sent.current) { sent.current = true; send(params.q!); } }, 250);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ready]);
+  }, []);
 
   const newChat = () => { haptic.select(); if (cid) stopPacer(cid); setCid(null); setText(''); setMenu(false); };
   const pick = (id: string) => { haptic.select(); setMenu(false); setCid(id); };
@@ -142,6 +164,10 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
       {sheet ? null : <AppBackground metalHeight="34%" />}
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         {header}
+        {/* El cuerpo (mensajes + compositor) es el que se encoge con el teclado: el compositor es absoluto respecto a ESTE contenedor, no al que tiene el padding del teclado. */}
+        <View style={{ flex: 1 }}>
+        {/* Los mensajes se desvanecen al acercarse al borde superior (y al compositor) en vez de cortarse en seco. */}
+        <Fade top={sheet ? 22 : 56} bottom={Math.round(composerSpace * 0.85)}>
         <ScrollView
           ref={scroll}
           style={{ flex: 1 }}
@@ -171,15 +197,17 @@ export function PacerChat({ mode, params }: { mode: 'full' | 'sheet'; params: Pa
                     </PressableScale>
                   ))}
                 </View>
-                <Text variant="footnote" tertiary center style={{ fontSize: 12 }}>Pacey orienta; no sustituye a tu entrenador ni a un médico.{'\n'}Versión de demostración: las respuestas son simuladas.</Text>
+                <Text variant="footnote" tertiary center style={{ fontSize: 12 }}>Pacey responde con {facts.role === 'coach' ? 'los datos de tu equipo' : 'tus datos'} y con el criterio de {facts.role === 'coach' ? 'tu trabajo como entrenador' : 'tu entrenador'}.{'\n'}No sustituye a {facts.role === 'coach' ? 'tu criterio' : 'tu entrenador'} ni a un médico.</Text>
               </Animated.View>
             )}
         </ScrollView>
+        </Fade>
 
         <View style={[styles.composerWrap, { paddingBottom: sheet ? 16 : Math.max(insets.bottom, 12) }]} pointerEvents="box-none">
           <Composer sheet={sheet} value={text} onChange={setText} busy={busy} inputRef={input}
             placeholder={facts.role === 'coach' && sheet ? 'Pregunta sobre el equipo…' : 'Pregunta a Pacey…'}
             onSend={() => send(text)} onStop={() => { if (cid) { haptic.light(); stopPacer(cid); } }} />
+        </View>
         </View>
       </KeyboardAvoidingView>
 
@@ -198,9 +226,6 @@ function Composer({ sheet, value, onChange, busy, onSend, onStop, placeholder, i
   const has = value.trim().length > 0;
   const body = (
     <View style={styles.composer}>
-      <PressableScale scale={0.9} onPress={() => inputRef.current?.focus()} accessibilityLabel="Adjuntar (próximamente)" accessibilityState={{ disabled: true }}>
-        <View style={styles.plus}><MaterialCommunityIcons name="plus" size={19} color={colors.textSecondary} /></View>
-      </PressableScale>
       <TextInput
         ref={inputRef}
         value={value}
@@ -250,7 +275,6 @@ const useStyles = createStyles((c) => ({
   composerWrap: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: 14, alignItems: 'center' },
   composerBox: { width: '100%', maxWidth: MAX_W, borderRadius: 29, borderCurve: 'continuous' },
   composer: { flexDirection: 'row', alignItems: 'flex-end', gap: 8, paddingLeft: 10, paddingRight: 8, paddingVertical: 8, minHeight: 58 },
-  plus: { width: 34, height: 34, borderRadius: 17, backgroundColor: 'rgba(0,0,0,0.06)', alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
   input: { flex: 1, fontFamily: fonts.regular, fontSize: 16, lineHeight: 21, color: c.text, maxHeight: 120, paddingTop: 11, paddingBottom: 11, ...(Platform.OS === 'web' ? ({ outlineStyle: 'none' } as object) : {}) },
   send: { width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center' },
 }));

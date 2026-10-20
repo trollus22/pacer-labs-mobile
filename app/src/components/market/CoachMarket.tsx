@@ -109,9 +109,9 @@ function Kpi({ label, value, note }: { label: string; value: string; note: strin
   const s = useStyles();
   return (
     <View style={[s.card, { flexGrow: 1, flexBasis: '46%', paddingVertical: 12, gap: 2 }]}>
-      <Text variant="caption" tertiary style={{ fontSize: 10 }}>{label}</Text>
-      <Text style={{ fontFamily: fonts.light, fontSize: 26, letterSpacing: -0.8 }}>{value}</Text>
-      <Text variant="footnote" tertiary style={{ fontSize: 11.5 }}>{note}</Text>
+      <Text variant="caption" tertiary style={{ fontSize: 10, lineHeight: 14 }}>{label}</Text>
+      <Text style={{ fontFamily: fonts.light, fontSize: 26, lineHeight: 34, letterSpacing: -0.8 }}>{value}</Text>
+      <Text variant="footnote" tertiary style={{ fontSize: 11.5, lineHeight: 16 }}>{note}</Text>
     </View>
   );
 }
@@ -176,7 +176,7 @@ const useLocalStyles = createStyles((c) => ({
   grid: { gap: 8 },
   ic: { width: 36, height: 36, borderRadius: 18, borderWidth: 1, borderColor: c.hairline, alignItems: 'center', justifyContent: 'center' },
   pill: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 9, height: 24, justifyContent: 'center' },
-  num: { fontFamily: fonts.light, fontSize: 42, letterSpacing: -1.5, color: c.text, marginTop: 4 },
+  num: { fontFamily: fonts.light, fontSize: 42, lineHeight: 52, letterSpacing: -1.5, color: c.text, marginTop: 2 },
   bars: { flexDirection: 'row', alignItems: 'flex-end', gap: 6, height: 96, marginTop: 14 },
   badge: { backgroundColor: c.ink, borderRadius: 11, paddingHorizontal: 9, height: 22, justifyContent: 'center' },
   athlete: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 10 },

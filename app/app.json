@@ -3,7 +3,7 @@
     "name": "PACER LABS",
     "slug": "pacer-labs",
     "scheme": "pacerlabs",
-    "version": "1.0.24",
+    "version": "1.0.25",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,7 @@
         "CADisableMinimumFrameDurationOnPhone": true,
         "ITSAppUsesNonExemptEncryption": false
       },
-      "buildNumber": "25"
+      "buildNumber": "26"
     },
     "android": {
       "package": "com.pacerlabs.app",
@@ -27,7 +27,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": true,
-      "versionCode": 25
+      "versionCode": 26
     },
     "web": {
       "bundler": "metro",
