@@ -21,7 +21,7 @@
     "android": {
       "package": "com.pacerlabs.app",
       "adaptiveIcon": {
-        "backgroundColor": "#0D0E12",
+        "backgroundColor": "#C9CDD2",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
